@@ -5,17 +5,19 @@ CXXFLAGS = -Wall -g
 #Inclusão de bibliotecas
 CXXLIBS = -lcryptopp
 
-#Geração do objeto block
-block: block.o
-	$(CXX) $(CXXFLAGS) -o block block.o $(CXXLIBS)
+#Geração dos objetos com função main
+blockchain: blockchain.o block.o
+	$(CXX) $(CXXFLAGS) -o blockchain blockchain.o block.o $(CXXLIBS)
 
-#Compilação das libs necessárias
+#Criação dos arquivos compilados das libs abaixo
 block.o: block.cpp block.h
 	$(CXX) $(CXXFLAGS) -c block.cpp $(CXXLIBS)
+blockchain.o: blockchain.cpp blockchain.h
+	$(CXX) $(CXXFLAGS) -c blockchain.cpp $(CXXLIBS)
 
 #Compilação de tudo
-all: block;
+all: blockchain;
 
 #Remoção dos arquivos gerados
 clean:
-	rm -f block block.o
+	rm -f blockchain *.o

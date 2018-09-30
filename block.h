@@ -7,7 +7,7 @@ using namespace std;
 class Block{
 
     private:
-        string data, previousHash, hash;
+        string data, hash, previousHash;
         time_t timestamp;
 
     public:
@@ -18,9 +18,11 @@ class Block{
         string getPreviousHash();
         time_t getTimestamp();
         string getTimestampAsString();
+
         void setData(string data);
-        void setHash(string previousHash);
+        void setHash();
         void setPreviousHash(string previousHash);
+
         void getAttributes();
 
 };

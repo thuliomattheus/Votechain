@@ -1,11 +1,17 @@
 #include <iostream>
+#include "block.h"
+
+// Utilizada para cálculo do timestamp
 #include <chrono>
+
+// Utilizadas para formatação do timestamp como string
 #include <sstream>
 #include <iomanip>
+
+// Utilizadas para cálculo do hash
 #include <cryptopp/filters.h>
 #include <cryptopp/hex.h>
 #include <cryptopp/sha.h>
-#include "block.h"
 
 using namespace std;
 using chrono::system_clock;
@@ -14,17 +20,7 @@ Block::Block(string data, string previousHash){
     this->data = data;
     this->previousHash = previousHash;
     this->timestamp = system_clock::to_time_t(system_clock::now());
-
-    CryptoPP::SHA256 hash;
-    string blockAttr = this->getData() + this->getPreviousHash() +
-        this->getTimestampAsString();
-
-	CryptoPP::StringSource s(blockAttr, true,
-			new CryptoPP::HashFilter(hash,
-				new CryptoPP::HexEncoder(
-					new CryptoPP::StringSink(this->hash))));
-
-    cout << this->hash << endl;
+    this->setHash();
 }
 
 string Block::getData(){
@@ -53,19 +49,24 @@ void Block::setData(string s){
     this->data = s;
 }
 
+void Block::setHash(){
+    CryptoPP::SHA256 hash;
+    string blockAttr = this->getData() + this->getPreviousHash() +
+        this->getTimestampAsString();
+
+	CryptoPP::StringSource s(blockAttr, true,
+			new CryptoPP::HashFilter(hash,
+				new CryptoPP::HexEncoder(
+					new CryptoPP::StringSink(this->hash))));
+}
+
 void Block::setPreviousHash(string s){
     this->previousHash = s;
 }
 
 void Block::getAttributes(){
-    cout << this->getData() << " " << this->getPreviousHash() << endl;
-    cout << this->getTimestampAsString() << endl;
-}
-
-
-int main(){
-
-    Block b0("Va embora", "arrombado da mulesta");
-    b0.getAttributes();
-    return 0;
+    cout << "Dados         : " << this->getData() << endl;
+    cout << "Hash Anterior : " << this->getPreviousHash() << endl;
+    cout << "Timestamp     : " << this->getTimestampAsString() << endl;
+    cout << "Hash Atual    : " << this->hash << "\n" << endl;
 }
