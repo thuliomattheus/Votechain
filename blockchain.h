@@ -10,6 +10,7 @@ using namespace std;
 class Blockchain{
 
     private:
+        const string genesisPreviousHash = "0000000000000000000000000000000000000000000000000000000000000000";
         int deep;
         string name;
         vector<Block> chain;
@@ -20,6 +21,8 @@ class Blockchain{
         Blockchain(string name);
 
         void addBlock(string data);
+        void showBlocks();
+        bool isChainValid();
 
 };
 

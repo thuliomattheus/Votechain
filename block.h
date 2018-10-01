@@ -23,7 +23,9 @@ class Block{
         void setHash();
         void setPreviousHash(string previousHash);
 
-        void getAttributes();
+        string getAttributesAsString();
+        void printFullDataAsString();
+        string calculateHash(string s);
 
 };
 

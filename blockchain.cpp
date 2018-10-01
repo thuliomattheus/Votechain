@@ -20,34 +20,65 @@ void Blockchain::addBlock(string data){
     else{
         this->chain.push_back(Block(data, this->chain.back().getHash()));
         this->deep++;
-        this->chain.back().getAttributes();
     }
 }
 
 void Blockchain::createGenesisBlock(string data){
-    this->chain.push_back(Block(data, "0000000000000000000000000000000000000000000000000000000000000000"));
+    this->chain.push_back(Block(data, this->genesisPreviousHash));
     this->deep++;
-    this->chain.back().getAttributes();
+}
+
+void Blockchain::showBlocks(){
+    for(vector<Block>::iterator n=this->chain.begin(); n!=this->chain.end(); n++){
+        n->printFullDataAsString();
+    }    
+}
+
+bool Blockchain::isChainValid(){
+
+    for(int i=0; i<this->deep; i++){
+
+        Block b1 = this->chain[i];
+
+        if(i!=0){
+            Block b0 = this->chain[i-1];
+
+            if(b1.getHash() != b1.calculateHash(b1.getAttributesAsString()) ||
+                (b1.getPreviousHash() != b0.getHash())){
+                return false;
+            }
+        }
+        else{
+            if(b1.getHash() != b1.calculateHash(b1.getAttributesAsString()) ||
+                b1.getPreviousHash() != this->genesisPreviousHash){
+                return false;
+            }
+        }
+
+    }
+    return true;
 }
 
 int main(){
 
+/* 
+    Block b0("primeiro", "1");
+    Block b1("segundo", "2");
+    Block b2 = b1;
+    b2.getAttributes();
+ */
     Blockchain b("Chelsea");
+
     b.addBlock("{Jogador : Hazard}");
-    sleep(1);
     b.addBlock("{Jogador : Kanté}");
-    sleep(1);
     b.addBlock("{Jogador : M. Alonso}");
-    sleep(1);
     b.addBlock("{Jogador : Jorginho}");
-    sleep(1);
     b.addBlock("{Jogador : Willian}");
-    sleep(1);
     b.addBlock("{Jogador : Rudiger}");
-    sleep(1);
     b.addBlock("{Jogador : D. Luiz}");
-    sleep(1);
     b.addBlock("{Jogador : Barkley}");
+
+    b.showBlocks();
 
     return 0;
 }
