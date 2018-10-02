@@ -31,10 +31,12 @@ void Blockchain::createGenesisBlock(string data){
 void Blockchain::showBlocks(){
     for(vector<Block>::iterator n=this->chain.begin(); n!=this->chain.end(); n++){
         n->printFullDataAsString();
-    }    
+    }
 }
 
 bool Blockchain::isChainValid(){
+
+    string target(difficulty, '0');
 
     for(int i=0; i<this->deep; i++){
 
@@ -43,14 +45,24 @@ bool Blockchain::isChainValid(){
         if(i!=0){
             Block b0 = this->chain[i-1];
 
-            if(b1.getHash() != b1.calculateHash(b1.getAttributesAsString()) ||
-                (b1.getPreviousHash() != b0.getHash())){
+            if( b1.getHash() != b1.calculateHash( b1.getAttributesAsString() ) ){
+                return false;
+            }
+            if( b1.getPreviousHash() != b0.getHash() ){
+                return false;
+            }
+            if( b1.getHash().substr(0, this->difficulty) !=  target){
                 return false;
             }
         }
         else{
-            if(b1.getHash() != b1.calculateHash(b1.getAttributesAsString()) ||
-                b1.getPreviousHash() != this->genesisPreviousHash){
+            if( b1.getHash() != b1.calculateHash( b1.getAttributesAsString() ) ){
+                return false;
+            }
+            if(b1.getPreviousHash() != this->genesisPreviousHash){
+                return false;
+            }
+            if( b1.getHash().substr(0, this->difficulty) !=  target){
                 return false;
             }
         }
@@ -61,25 +73,31 @@ bool Blockchain::isChainValid(){
 
 int main(){
 
-/* 
-    Block b0("primeiro", "1");
-    Block b1("segundo", "2");
-    Block b2 = b1;
-    b2.getAttributes();
- */
     Blockchain b("Chelsea");
 
     b.addBlock("{Jogador : Hazard}");
-    b.addBlock("{Jogador : Kanté}");
-    b.addBlock("{Jogador : M. Alonso}");
-    b.addBlock("{Jogador : Jorginho}");
-    b.addBlock("{Jogador : Willian}");
-    b.addBlock("{Jogador : Rudiger}");
-    b.addBlock("{Jogador : D. Luiz}");
-    b.addBlock("{Jogador : Barkley}");
-
     b.showBlocks();
-    b.isChainValid();
+    cout << (b.isChainValid() ? "A blockchain é válida\n\n" : "A blockchain é inválida\n\n");
+    b.chain.back().mineBlock(b.difficulty);
+    b.showBlocks();
+    cout << (b.isChainValid() ? "A blockchain é válida\n\n" : "A blockchain é inválida\n\n");
+    // b.addBlock("{Jogador : Kanté}");
+    // b.chain.back().mineBlock(b.difficulty);
+    // b.addBlock("{Jogador : M. Alonso}");
+    // b.chain.back().mineBlock(b.difficulty);
+    // b.addBlock("{Jogador : Jorginho}");
+    // b.chain.back().mineBlock(b.difficulty);
+    // b.addBlock("{Jogador : Willian}");
+    // b.chain.back().mineBlock(b.difficulty);
+    // b.addBlock("{Jogador : Rudiger}");
+    // b.chain.back().mineBlock(b.difficulty);
+    // b.addBlock("{Jogador : D. Luiz}");
+    // b.chain.back().mineBlock(b.difficulty);
+    // b.addBlock("{Jogador : Barkley}");
+    // b.chain.back().mineBlock(b.difficulty);
+
+    // b.showBlocks();
+    // cout << b.isChainValid() ? "A blockchain é válida" : "A blockchain é inválida";
 
     return 0;
 }

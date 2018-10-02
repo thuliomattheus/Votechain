@@ -9,12 +9,14 @@ class Block{
     private:
         string data, hash, previousHash;
         time_t timestamp;
+        uint64_t nonce;
 
     public:
         Block(string data, string getPreviousHash);
 
         string getData();
         string getHash();
+        uint64_t getNonce();
         string getPreviousHash();
         time_t getTimestamp();
         string getTimestampAsString();
@@ -26,7 +28,7 @@ class Block{
         string getAttributesAsString();
         void printFullDataAsString();
         string calculateHash(string s);
-
+        void mineBlock(int difficulty);
 };
 
 #endif
