@@ -79,6 +79,7 @@ int main(){
     b.addBlock("{Jogador : Barkley}");
 
     b.showBlocks();
+    b.isChainValid();
 
     return 0;
 }

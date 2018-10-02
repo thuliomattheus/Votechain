@@ -9,9 +9,9 @@
 #include <iomanip>
 
 // Utilizadas para cálculo do hash
-#include <cryptopp/filters.h>
-#include <cryptopp/hex.h>
-#include <cryptopp/sha.h>
+#include "lib/cryptopp/filters.h"
+#include "lib/cryptopp/hex.h"
+#include "lib/cryptopp/sha.h"
 
 using namespace std;
 using chrono::system_clock;
