@@ -1,11 +1,11 @@
 #include "cryptoppLib.h"
 
-void CryptoppLib::generatePairKey(){
+void CryptoppLib::generatePairKeyAsString(string &pubK, string &privK){
 
 	// Gerador de número aleatório
 	AutoSeededRandomPool rng;
 
-	// Declaração da chave privada
+	// // Declaração da chave privada
 	RSA::PrivateKey privKey;
 
 	// Criação da chave privada utilizando 3072 bits
@@ -14,11 +14,11 @@ void CryptoppLib::generatePairKey(){
 	// Criação da chave pública da chave privada criada
 	RSA::PublicKey pubKey(privKey);
 
-	// Criação dos arquivos que guardarão as chaves codificados utilizando base64
-	Base64Encoder privKeySink(new FileSink("keys/privKey.txt"));
-	Base64Encoder pubKeySink(new FileSink("keys/pubKey.txt"));
+	// Aponta o codificador de base64 para atuar sobre a string
+	Base64Encoder privKeySink(new StringSink(privK));
+	Base64Encoder pubKeySink(new StringSink(pubK));
 
-	// Copia a chave privada para o arquivo 'privkey.txt'
+	// Copia as chaves para as respectivas strings
 	privKey.DEREncode(privKeySink);
 	pubKey.DEREncode(pubKeySink);
 
@@ -26,22 +26,4 @@ void CryptoppLib::generatePairKey(){
 	privKeySink.MessageEnd();
     pubKeySink.MessageEnd();
 
-    string privKeyAsString, pubKeyAsString;
-
-    FileSource file1("keys/pubKey.txt", true, new StringSink (pubKeyAsString));
-    FileSource file2("keys/privKey.txt", true, new StringSink (privKeyAsString));
-
-    cout << pubKeyAsString << endl << endl;
-    cout << privKeyAsString;
-
 }
-
-// int main(){
-
-//     CryptoppLib teste;
-
-//     teste.generatePairKey();
-
-//     return 0;
-// }
-

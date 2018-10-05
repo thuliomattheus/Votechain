@@ -78,7 +78,12 @@ int main(){
 
     CryptoppLib c;
 
-    c.generatePairKey();
+    string pubK, privK;
+
+    c.generatePairKeyAsString(pubK, privK);
+
+    cout << "A chave pública é : \n" << pubK << "\n\n";
+    cout << "A chave privada é : \n" << privK;
 
     // b.addBlock("{Jogador : Kanté}");
     // b.chain.back().mineBlock(b.difficulty);

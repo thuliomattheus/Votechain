@@ -33,7 +33,7 @@
 class CryptoppLib{
 
     public:
-        void generatePairKey();
+        void generatePairKeyAsString(string &pubK, string &privK);
 
 };
 
