@@ -1,9 +1,10 @@
 #ifndef blockchain_h
 #define blockchain_h
 
-#include <iostream>
-#include <vector>
 #include "block.h"
+#include "cryptoppLib.h"
+
+#include <vector>
 
 using namespace std;
 

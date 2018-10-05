@@ -1,10 +1,4 @@
-#include <iostream>
-#include <vector>
-#include <unistd.h>
 #include "blockchain.h"
-#include "block.h"
-
-using namespace std;
 
 Blockchain::Blockchain(string name){
     this->name = name;
@@ -81,6 +75,11 @@ int main(){
     b.chain.back().mineBlock(b.difficulty);
     b.showBlocks();
     cout << (b.isChainValid() ? "A blockchain é válida\n\n" : "A blockchain é inválida\n\n");
+
+    CryptoppLib c;
+
+    c.generatePairKey();
+
     // b.addBlock("{Jogador : Kanté}");
     // b.chain.back().mineBlock(b.difficulty);
     // b.addBlock("{Jogador : M. Alonso}");

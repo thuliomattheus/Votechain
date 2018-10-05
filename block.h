@@ -2,7 +2,28 @@
 #define block_h
 
 #include <iostream>
-using namespace std;
+    using namespace std;
+
+#include <iomanip>
+    // put_time
+
+#include <sstream>
+
+#include <chrono>
+    using chrono::system_clock;
+    using chrono::high_resolution_clock;
+    using chrono::duration_cast;
+
+#include "lib/cryptopp/filters.h"
+    using CryptoPP::StringSource;
+    using CryptoPP::HashFilter;
+    using CryptoPP::StringSink;
+
+#include "lib/cryptopp/hex.h"
+    using CryptoPP::HexEncoder;
+
+#include "lib/cryptopp/sha.h"
+    using CryptoPP::SHA256;
 
 class Block{
 

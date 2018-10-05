@@ -1,20 +1,4 @@
-#include <iostream>
 #include "block.h"
-
-// Utilizada para cálculo do timestamp
-#include <chrono>
-
-// Utilizadas para formatação do timestamp como string
-#include <sstream>
-#include <iomanip>
-
-// Utilizadas para cálculo do hash
-#include "lib/cryptopp/filters.h"
-#include "lib/cryptopp/hex.h"
-#include "lib/cryptopp/sha.h"
-
-using namespace std;
-using chrono::system_clock;
 
 Block::Block(string data, string previousHash){
     this->data = data;
@@ -78,12 +62,12 @@ void Block::printFullDataAsString(){
 string Block::calculateHash(string s){
     string hashed_s;
 
-    CryptoPP::SHA256 hash;
+    SHA256 hash;
 
-	CryptoPP::StringSource ssource(s, true,
-			new CryptoPP::HashFilter(hash,
-				new CryptoPP::HexEncoder(
-					new CryptoPP::StringSink(hashed_s))));
+	StringSource ssource(s, true,
+			new HashFilter(hash,
+				new HexEncoder(
+					new StringSink(hashed_s))));
 
     return hashed_s;
 }
@@ -93,14 +77,14 @@ void Block::mineBlock(int difficulty){
     // Crie uma string de tamanho 'difficulty' composta apenas por zeros
     string target(difficulty, '0');
 
-    auto startTime = chrono::high_resolution_clock::now();
+    auto startTime = high_resolution_clock::now();
 
     // Enquanto os primeiros 'difficulty' caracteres forem diferentes de 0
     while(this->hash.substr(0, difficulty) != target){
         nonce++;
         this->setHash();
     }
-    auto endTime = chrono::high_resolution_clock::now();
+    auto endTime = high_resolution_clock::now();
 
-    cout << "Bloco minerado em " << chrono::duration_cast<chrono::seconds>(endTime - startTime).count() << " segundos\n\n";
+    cout << "Bloco minerado em " << duration_cast<chrono::seconds>(endTime - startTime).count() << " segundos\n\n";
 }
