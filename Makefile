@@ -6,25 +6,28 @@ CXXFLAGS = -Wall -g #-H
 #CXXLIBS = -lcryptopp
 
 #Geração dos objetos com função main passando as libs e os objetos necessários
-blockchain: blockchain.o block.o cryptoppLib.o
-	$(CXX) $(CXXFLAGS) -o blockchain blockchain.o block.o cryptoppLib.o lib/cryptopp/libcryptopp.a
-
-#cryptoppLib: cryptoppLib.o
-#	$(CXX) $(CXXFLAGS) -o teste cryptoppLib.o lib/cryptopp/libcryptopp.a
+urn: urn.o voteBlock.o vote.o electorArea.o stringUtil.o
+	$(CXX) $(CXXFLAGS) -o urn urn.o voteBlock.o vote.o electorArea.o stringUtil.o lib/cryptopp/libcryptopp.a
 
 #Criação dos arquivos compilados das libs abaixo
-block.o: block.cpp block.h
-	$(CXX) $(CXXFLAGS) -c block.cpp
+urn.o: source/urn.cpp headers/urn.h
+	$(CXX) $(CXXFLAGS) -c source/urn.cpp
 
-blockchain.o: blockchain.cpp blockchain.h
-	$(CXX) $(CXXFLAGS) -c blockchain.cpp
+voteBlock.o: source/voteBlock.cpp headers/voteBlock.h
+	$(CXX) $(CXXFLAGS) -c source/voteBlock.cpp
 
-cryptoppLib.o: cryptoppLib.cpp
-	$(CXX) $(CXXFLAGS) -c cryptoppLib.cpp
+vote.o: source/vote.cpp headers/vote.h
+	$(CXX) $(CXXFLAGS) -c source/vote.cpp
+
+electorArea.o: source/electorArea.cpp headers/electorArea.h
+	$(CXX) $(CXXFLAGS) -c source/electorArea.cpp
+
+stringUtil.o: source/stringUtil.cpp headers/stringUtil.h
+	$(CXX) $(CXXFLAGS) -c source/stringUtil.cpp
 
 #Compilação de tudo
-all: blockchain;
+all: urn;
 
 #Remoção dos arquivos gerados
 clean:
-	rm -f blockchain keys/* *.o
+	rm -f urn *.o
