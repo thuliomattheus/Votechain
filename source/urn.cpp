@@ -1,10 +1,7 @@
 #include "../headers/urn.h"
 
-Urn::Urn(string name){
-    this->name = name;
+Urn::Urn(){
     this->deep = 0;
-
-    cout << "Blockchain do " << this->name << "\n\n";
 }
 
 void Urn::addBlock(string data){
@@ -68,46 +65,6 @@ bool Urn::isChainValid(){
     return true;
 }
 
-int main(){
-
-    Urn b("Chelsea");
-
-    b.addBlock("{Jogador : Hazard}");
-    b.showBlocks();
-    cout << (b.isChainValid() ? "A blockchain é válida\n\n" : "A blockchain é inválida\n\n");
-    b.chain.back().mineBlock(b.difficulty);
-    b.showBlocks();
-    cout << (b.isChainValid() ? "A blockchain é válida\n\n" : "A blockchain é inválida\n\n");
-
-    ElectorArea meuPerfil;
-
-    meuPerfil.testarAssinaturas(meuPerfil.getPublicKey());
-
-    ElectorArea outroPerfil;
-
-    meuPerfil.testarAssinaturas(outroPerfil.getPublicKey());
-
-    // Vote v(meuPerfil.pubKey, meuPerfil.pubKey);
-
-    // v.showHash();
-
-    // b.addBlock("{Jogador : Kanté}");
-    // b.chain.back().mineBlock(b.difficulty);
-    // b.addBlock("{Jogador : M. Alonso}");
-    // b.chain.back().mineBlock(b.difficulty);
-    // b.addBlock("{Jogador : Jorginho}");
-    // b.chain.back().mineBlock(b.difficulty);
-    // b.addBlock("{Jogador : Willian}");
-    // b.chain.back().mineBlock(b.difficulty);
-    // b.addBlock("{Jogador : Rudiger}");
-    // b.chain.back().mineBlock(b.difficulty);
-    // b.addBlock("{Jogador : D. Luiz}");
-    // b.chain.back().mineBlock(b.difficulty);
-    // b.addBlock("{Jogador : Barkley}");
-    // b.chain.back().mineBlock(b.difficulty);
-
-    // b.showBlocks();
-    // cout << b.isChainValid() ? "A blockchain é válida" : "A blockchain é inválida";
-
-    return 0;
-}
+// https://fullstack-developer.academy/blockchain-implementation-using-javascript/
+// https://medium.com/@lhartikk/a-blockchain-in-200-lines-of-code-963cc1cc0e54
+// https://medium.com/programmers-blockchain/creating-your-first-blockchain-with-java-part-2-transactions-2cdac335e0ce

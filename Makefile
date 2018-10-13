@@ -6,8 +6,8 @@ CXXFLAGS = -Wall -g #-H
 #CXXLIBS = -lcryptopp
 
 #Geração dos objetos com função main passando as libs e os objetos necessários
-urn: urn.o voteBlock.o vote.o electorArea.o stringUtil.o
-	$(CXX) $(CXXFLAGS) -o urn urn.o voteBlock.o vote.o electorArea.o stringUtil.o lib/cryptopp/libcryptopp.a
+myArea: electorArea.o vote.o stringUtil.o voteBlock.o urn.o
+	$(CXX) $(CXXFLAGS) -o myArea electorArea.o vote.o stringUtil.o voteBlock.o urn.o lib/cryptopp/libcryptopp.a
 
 #Criação dos arquivos compilados das libs abaixo
 urn.o: source/urn.cpp headers/urn.h
@@ -26,8 +26,8 @@ stringUtil.o: source/stringUtil.cpp headers/stringUtil.h
 	$(CXX) $(CXXFLAGS) -c source/stringUtil.cpp
 
 #Compilação de tudo
-all: urn;
+all: myArea;
 
 #Remoção dos arquivos gerados
 clean:
-	rm -f urn *.o
+	rm -f myArea *.o

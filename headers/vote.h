@@ -13,14 +13,15 @@ class Vote{
         string voteId;
         RSA::PublicKey elector;
         RSA::PublicKey candidate;
-        // byte signature[];
+        SecByteBlock signature;
 
-        Vote(RSA::PublicKey from, RSA::PublicKey to);
-        void showHash();
-
+        Vote(RSA::PublicKey from, RSA::PublicKey to, RSA::PrivateKey me);
+        void generateSignature(RSA::PrivateKey pvK);
+        bool verifySignature();
 
     private:
         string calculateHash();
+
 
 };
 

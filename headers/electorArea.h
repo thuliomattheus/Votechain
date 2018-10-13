@@ -4,6 +4,8 @@
 #include <iostream>
     using namespace std;
 
+#include "urn.h"
+#include "vote.h"
 #include "stringUtil.h"
 
 #include "../lib/cryptopp/rsa.h"
@@ -16,19 +18,27 @@ class ElectorArea{
 
     private:
 
+        string name;
+        string cpf;
+        string voterTitle;
     	RSA::PrivateKey privKey;
     	RSA::PublicKey pubKey;
+        Urn blockchain;
 
-        string getPrivateKeyAsString();
-        string getPublicKeyAsString();
+        // string getPrivateKeyAsString();
+        // string getPublicKeyAsString();
 
     public:
 
-        ElectorArea();
+        ElectorArea(string name, string cpf, string voterTitle);
+
+        string getName();
 
         RSA::PublicKey getPublicKey();
 
-        void testarAssinaturas(RSA::PublicKey pubK);
+        Vote toVote(RSA::PublicKey candidate);
+
+        void teste();
 
 };
 
