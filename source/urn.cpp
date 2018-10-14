@@ -9,13 +9,14 @@ void Urn::addBlock(string data){
         this->createGenesisBlock(data);
     }
     else{
-        this->chain.push_back(VoteBlock(data, this->chain.back().getHash()));
+        this->chain.push_back(VoteBlock(data, this->chain.back().getHash(), deep));
         this->deep++;
     }
+    this->chain.back().mineBlock(this->difficulty);
 }
 
 void Urn::createGenesisBlock(string data){
-    this->chain.push_back(VoteBlock(data, this->genesisPreviousHash));
+    this->chain.push_back(VoteBlock(data, this->genesisPreviousHash, deep));
     this->deep++;
 }
 
@@ -68,3 +69,7 @@ bool Urn::isChainValid(){
 // https://fullstack-developer.academy/blockchain-implementation-using-javascript/
 // https://medium.com/@lhartikk/a-blockchain-in-200-lines-of-code-963cc1cc0e54
 // https://medium.com/programmers-blockchain/creating-your-first-blockchain-with-java-part-2-transactions-2cdac335e0ce
+// https://medium.com/@mycoralhealth/code-your-own-blockchain-in-less-than-200-lines-of-go-e296282bcffc
+
+// https://bitcoin.org/en/developer-documentation
+// https://www.investopedia.com/news/how-bitcoin-works/

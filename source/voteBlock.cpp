@@ -1,6 +1,7 @@
 #include "../headers/voteBlock.h"
 
-VoteBlock::VoteBlock(string data, string previousHash){
+VoteBlock::VoteBlock(string data, string previousHash, int index){
+    this->index = index;
     this->data = data;
     this->previousHash = previousHash;
     this->timestamp = system_clock::to_time_t(system_clock::now());
@@ -23,7 +24,7 @@ string VoteBlock::getTimestampAsString(){
 }
 
 string VoteBlock::getAttributesAsString(){
-    return this->data + this->previousHash +
+    return to_string(this->index) + this->data + this->previousHash +
         this->getTimestampAsString() + to_string(this->nonce);
 }
 
@@ -33,6 +34,7 @@ void VoteBlock::setHash(){
 }
 
 void VoteBlock::showFullData(){
+    cout << "Índice        : " << this->index << endl;
     cout << "Dados         : " << this->data << endl;
     cout << "Hash Anterior : " << this->previousHash << endl;
     cout << "Timestamp     : " << this->getTimestampAsString() << endl;

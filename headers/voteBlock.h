@@ -22,9 +22,10 @@ class VoteBlock{
         string data, hash, previousHash;
         time_t timestamp;
         uint64_t nonce;
+        int index;
 
     public:
-        VoteBlock(string data, string getPreviousHash);
+        VoteBlock(string data, string getPreviousHash, int index);
 
         string getHash();
         string getPreviousHash();

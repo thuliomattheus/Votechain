@@ -28,7 +28,6 @@ RSA::PublicKey ElectorArea::getPublicKey(){
 
 string ElectorArea::getName(){
 
-	cout << this->blockchain.deep << endl;
 	return this->name;
 }
 
@@ -58,8 +57,20 @@ Vote ElectorArea::toVote(RSA::PublicKey candidate){
 // }
 
 void ElectorArea::teste(){
+	this->blockchain.showBlocks();
+	cout << (this->blockchain.isChainValid() ? "A blockchain é válida\n\n" : "A blockchain é inválida\n\n");
+
 	this->blockchain.addBlock("{Jogador : Hazard}");
 	this->blockchain.showBlocks();
+	cout << (this->blockchain.isChainValid() ? "A blockchain é válida\n\n" : "A blockchain é inválida\n\n");
+
+	this->blockchain.addBlock("{Jogador : Kanté}");
+	this->blockchain.showBlocks();
+	cout << (this->blockchain.isChainValid() ? "A blockchain é válida\n\n" : "A blockchain é inválida\n\n");
+
+	this->blockchain.addBlock("{Jogador : Marcos Alonso}");
+	this->blockchain.showBlocks();
+	cout << (this->blockchain.isChainValid() ? "A blockchain é válida\n\n" : "A blockchain é inválida\n\n");
 
 //     cout << (u.isChainValid() ? "A blockchain é válida\n\n" : "A blockchain é inválida\n\n");
 //     u.chain.back().mineBlock(u.difficulty);

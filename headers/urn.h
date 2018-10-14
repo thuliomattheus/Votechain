@@ -20,7 +20,7 @@ class Urn{
 
         int deep;
         vector<VoteBlock> chain;
-        const static int difficulty = 6;
+        const static int difficulty = 5;
 
         void addBlock(string data);
         void showBlocks();
