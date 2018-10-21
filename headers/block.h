@@ -1,11 +1,11 @@
-#ifndef voteBlock_h
-#define voteBlock_h
+#ifndef block_h
+#define block_h
 
 #include <iostream>
     using namespace std;
 
 #include <iomanip>
-    // put_time
+    //Necessário para usar put_time
 
 #include <sstream>
 
@@ -14,18 +14,20 @@
     using chrono::high_resolution_clock;
     using chrono::duration_cast;
 
-#include "stringUtil.h"
+#include "utilities.h"
+    using Utilities::StringUtil;
 
-class VoteBlock{
+class Block{
 
     private:
-        string data, hash, previousHash;
+        Document& data;
+        string hash, previousHash;
         time_t timestamp;
-        uint64_t nonce;
         int index;
 
     public:
-        VoteBlock(string data, string getPreviousHash, int index);
+        Block(Document& data, string getPreviousHash, int index);
+        uint64_t nonce;
 
         string getHash();
         string getPreviousHash();
@@ -35,7 +37,6 @@ class VoteBlock{
 
         string getAttributesAsString();
         void showFullData();
-        void mineBlock(int difficulty);
 };
 
 #endif

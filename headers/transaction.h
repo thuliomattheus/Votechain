@@ -3,19 +3,20 @@
 
 #include <iostream>
 
-#include "stringUtil.h"
+#include "utilities.h"
+    using Utilities::StringUtil;
 
 using namespace std;
 
-class Vote{
+class Transaction{
 
     public:
-        string voteId;
+        string transactionId;
         RSA::PublicKey elector;
         RSA::PublicKey candidate;
         SecByteBlock signature;
 
-        Vote(RSA::PublicKey from, RSA::PublicKey to, RSA::PrivateKey me);
+        Transaction(RSA::PublicKey from, RSA::PublicKey to, RSA::PrivateKey me);
         void generateSignature(RSA::PrivateKey pvK);
         bool verifySignature();
 

@@ -1,33 +1,33 @@
 #Compilador utilizado
 CXX = g++
 #Todos os avisos (all warnings) e debug
-CXXFLAGS = -Wall -g #-H
+CXXFLAGS = -Wall -g # Para mostrar as dependências: -H
 #Inclusão de bibliotecas
 #CXXLIBS = -lcryptopp
 
-#Geração dos objetos com função main passando as libs e os objetos necessários
-myArea: electorArea.o vote.o stringUtil.o voteBlock.o urn.o
-	$(CXX) $(CXXFLAGS) -o myArea electorArea.o vote.o stringUtil.o voteBlock.o urn.o lib/cryptopp/libcryptopp.a
+#Geração do executável -arquivo com função main- a partir das libs e objetos necessários
+run: wallet.o transaction.o utilities.o block.o blockchain.o
+	$(CXX) $(CXXFLAGS) -o run wallet.o transaction.o utilities.o block.o blockchain.o lib/cryptopp/libcryptopp.a
 
-#Criação dos arquivos compilados das libs abaixo
-urn.o: source/urn.cpp headers/urn.h
-	$(CXX) $(CXXFLAGS) -c source/urn.cpp
+#Criação dos objetos necessários utilizandos as api's e implementações dos mesmos
+blockchain.o: source/blockchain.cpp headers/blockchain.h
+	$(CXX) $(CXXFLAGS) -c source/blockchain.cpp
 
-voteBlock.o: source/voteBlock.cpp headers/voteBlock.h
-	$(CXX) $(CXXFLAGS) -c source/voteBlock.cpp
+block.o: source/block.cpp headers/block.h
+	$(CXX) $(CXXFLAGS) -c source/block.cpp
 
-vote.o: source/vote.cpp headers/vote.h
-	$(CXX) $(CXXFLAGS) -c source/vote.cpp
+transaction.o: source/transaction.cpp headers/transaction.h
+	$(CXX) $(CXXFLAGS) -c source/transaction.cpp
 
-electorArea.o: source/electorArea.cpp headers/electorArea.h
-	$(CXX) $(CXXFLAGS) -c source/electorArea.cpp
+wallet.o: source/wallet.cpp headers/wallet.h
+	$(CXX) $(CXXFLAGS) -c source/wallet.cpp
 
-stringUtil.o: source/stringUtil.cpp headers/stringUtil.h
-	$(CXX) $(CXXFLAGS) -c source/stringUtil.cpp
+utilities.o: source/utilities.cpp headers/utilities.h
+	$(CXX) $(CXXFLAGS) -c source/utilities.cpp
 
 #Compilação de tudo
-all: myArea;
+all: run;
 
 #Remoção dos arquivos gerados
 clean:
-	rm -f myArea *.o
+	rm -f run *.o

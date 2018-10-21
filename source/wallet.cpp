@@ -1,6 +1,6 @@
-#include "../headers/electorArea.h"
+#include "../headers/wallet.h"
 
-ElectorArea::ElectorArea(string name, string cpf, string voterTitle){
+Wallet::Wallet(string name, string cpf, string voterTitle){
 
 	this->name = name;
 	this->cpf = cpf;
@@ -20,64 +20,78 @@ ElectorArea::ElectorArea(string name, string cpf, string voterTitle){
 
 }
 
-RSA::PublicKey ElectorArea::getPublicKey(){
+RSA::PublicKey Wallet::getPublicKey(){
 
 	return this->pubKey;
 
 }
 
-string ElectorArea::getName(){
+string Wallet::getName(){
 
 	return this->name;
 }
 
-Vote ElectorArea::toVote(RSA::PublicKey candidate){
+Transaction Wallet::toVote(RSA::PublicKey candidate){
 
-	Vote v(this->pubKey, candidate, this->privKey);
+	Transaction v(this->pubKey, candidate, this->privKey);
 
 	return v;
 
 }
 
-// string ElectorArea::getPublicKeyAsString(){
+void Wallet::updateBlockchain(Blockchain b){
+	if(b.deep > this->blockchain.deep){
+		this->blockchain = b;
+	}
+}
 
-// 	StringUtil su;
+// string Wallet::getPublicKeyAsString(){
 
-// 	return su.pubKeyAsString(this->pubKey);
-
-// }
-
-
-// string ElectorArea::getPrivateKeyAsString(){
-
-// 	StringUtil su;
-
-// 	return su.privKeyAsString(this->privKey);
+// 	return StringUtil::pubKeyAsString(this->pubKey);
 
 // }
 
-void ElectorArea::teste(){
+
+// string Wallet::getPrivateKeyAsString(){
+
+// 	return StringUtil::privKeyAsString(this->privKey);
+
+// }
+
+void Wallet::teste(){
+
+	const char* json =  "[{\"name\": \"Eden Hazard\",\"team\": \"chelsea\"},{\"name\": \"N'golo Kanté\",\"team\": \"chelsea\"}]";
+
+	Document d;
+	d.Parse(json);
+
 	this->blockchain.showBlocks();
 	cout << (this->blockchain.isChainValid() ? "A blockchain é válida\n\n" : "A blockchain é inválida\n\n");
 
-	this->blockchain.addBlock("{Jogador : Hazard}");
+	this->blockchain.addBlock(d);
+	this->blockchain.showBlocks();
+	cout << (this->blockchain.isChainValid() ? "A blockchain é válida\n\n" : "A blockchain é inválida\n\n");
+	this->blockchain.proofOfWork(this->blockchain.deep-1, this->blockchain.difficulty);
 	this->blockchain.showBlocks();
 	cout << (this->blockchain.isChainValid() ? "A blockchain é válida\n\n" : "A blockchain é inválida\n\n");
 
-	this->blockchain.addBlock("{Jogador : Kanté}");
+	this->blockchain.addBlock(d);
+	this->blockchain.showBlocks();
+	cout << (this->blockchain.isChainValid() ? "A blockchain é válida\n\n" : "A blockchain é inválida\n\n");
+	this->blockchain.proofOfWork(this->blockchain.deep-1, this->blockchain.difficulty);
 	this->blockchain.showBlocks();
 	cout << (this->blockchain.isChainValid() ? "A blockchain é válida\n\n" : "A blockchain é inválida\n\n");
 
-	this->blockchain.addBlock("{Jogador : Marcos Alonso}");
-	this->blockchain.showBlocks();
-	cout << (this->blockchain.isChainValid() ? "A blockchain é válida\n\n" : "A blockchain é inválida\n\n");
+	// this->blockchain.addBlock("{Jogador : Marcos Alonso}");
+	// this->blockchain.showBlocks();
+	// cout << (this->blockchain.isChainValid() ? "A blockchain é válida\n\n" : "A blockchain é inválida\n\n");
 
 //     cout << (u.isChainValid() ? "A blockchain é válida\n\n" : "A blockchain é inválida\n\n");
 //     u.chain.back().mineBlock(u.difficulty);
 //     u.showBlocks();
 //     cout << (u.isChainValid() ? "A blockchain é válida\n\n" : "A blockchain é inválida\n\n");
 
-//     ElectorArea meuPerfil, outroPerfil;
+//     Wallet meuPerfil, outroPerfil;
 
 //     Vote v = meuPerfil.toVote(outroPerfil.getPublicKey());
 
@@ -106,11 +120,29 @@ void ElectorArea::teste(){
 }
 
 int main(){
-	ElectorArea eu("meu nome", "meu cpf", "meu titulo");
-
-	cout << eu.getName() << endl;
+	Wallet eu("meu nome", "meu cpf", "meu titulo");
 
 	eu.teste();
 
-	cout << eu.getName() << endl;
+	const char* json =  "[{\"name\": \"Eden Hazard\",\"team\": \"chelsea\"},{\"name\": \"N'golo Kanté\",\"team\": \"chelsea\"}]";
+
+	Document d;
+	d.Parse(json);
+	
+	cout << StringUtil::documentToString(d) << endl;
+
+	// Value& s = d[1]["name"];
+	// cout << s.GetString() << endl;
+
+	return 0;
+
 }
+
+// https://fullstack-developer.academy/blockchain-implementation-using-javascript/
+// https://medium.com/@lhartikk/a-blockchain-in-200-lines-of-code-963cc1cc0e54
+// https://medium.com/programmers-blockchain/creating-your-first-blockchain-with-java-part-2-transactions-2cdac335e0ce
+// https://medium.com/@mycoralhealth/code-your-own-blockchain-in-less-than-200-lines-of-go-e296282bcffc
+
+// https://bitcoin.org/en/developer-documentation
+// https://www.investopedia.com/news/how-bitcoin-works/
+// https://www.guru99.com/blockchain-tutorial.html
