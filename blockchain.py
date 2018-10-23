@@ -108,3 +108,7 @@ print("A cadeia é válida!\n" if c.isChainValid() else "A cadeia é inválida!\
 c.validateChain()
 c.showBlocks()
 print("A cadeia é válida!\n" if c.isChainValid() else "A cadeia é inválida!\n")
+
+# https://medium.com/@raul_11817/rsa-with-cryptography-python-library-462b26ce4120
+# https://docs.python.org/3/library/base64.html#module-base64
+# https://stackoverflow.com/questions/45146504/python-cryptography-module-save-load-rsa-keys-to-from-file
