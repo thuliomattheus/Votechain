@@ -1,8 +1,9 @@
-*
-!*.h
-!*.cpp
-!*.py
-!*Makefile
-!*/
-!.gitignore
-lib
+#*
+#!*.h
+#!*.cpp
+#!*.py
+#!*Makefile
+#!*/
+#!.gitignore
+#lib
+
