@@ -1,0 +1,9 @@
+.breadcrumb li+li:before{
+    padding: 0px 30px;
+    color: #f00;
+    content: "";
+}
+
+.breadcrumb li.active a {
+    color: #0bf;
+}

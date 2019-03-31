@@ -39,10 +39,18 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'nodeProject.urls'
 
+REST_FRAMEWORK = {
+    'DATETIME_FORMAT' : "%d/%m/%Y %H:%M:%S UTC%z",
+    'DEFAULT_RENDERER_CLASSES': (    
+        'rest_framework.renderers.JSONRenderer',
+        'nodeProject.nodeApp.renderers.BrowsableAPIExtendedRenderer',
+    )
+}
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(os.path.dirname(__file__), 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -100,10 +108,6 @@ USE_I18N = False
 USE_L10N = True
 
 USE_TZ = True
-
-REST_FRAMEWORK = {
-    'DATETIME_FORMAT' : "%d/%m/%Y %H:%M:%S UTC%z",
-}
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/

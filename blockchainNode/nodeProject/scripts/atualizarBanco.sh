@@ -1,5 +1,5 @@
 #! /bin/bash
-cd ~/Documentos/tccVEnv/TCC/blockchainNode
+cd ~/Documentos/TCC/blockchainNode
 rm db.sqlite3
 rm -r nodeProject/nodeApp/migrations
 python manage.py makemigrations nodeApp

@@ -24,7 +24,7 @@ class Command(BaseCommand):
             if(queryset):
 
                 # Índice do novo bloco
-                index = Block.objects.count() + 1
+                index = Block.objects.count()
 
                 # Serialização dos votos
                 serializer = VoteSerializer(queryset, many=True)
@@ -33,7 +33,7 @@ class Command(BaseCommand):
                 votes = json.dumps(serializer.data, indent=3, ensure_ascii=False)
 
                 # Caso o bloco adicionado seja o bloco genesis
-                if(index == 1):
+                if(index == 0):
                     previousBlockHash = "0" * 64
                 # Caso contrário
                 else:
@@ -48,9 +48,6 @@ class Command(BaseCommand):
                 # Data e hora da criação do bloco
                 timestamp = timezone.now()
 
-                # Definição do hash atual do bloco
-                currentBlockHash = "1"*64
-
                 # Criação de um novo objeto do tipo Bloco,
                 # passando apenas os votos e o hash anterior
                 novoBloco = Block(
@@ -60,7 +57,6 @@ class Command(BaseCommand):
                     difficulty = difficulty,
                     nonce = nonce,
                     previousBlockHash = previousBlockHash,
-                    currentBlockHash = currentBlockHash
                 )
                 # Commit no banco
                 novoBloco.save()
@@ -69,6 +65,3 @@ class Command(BaseCommand):
                 for voto in queryset:
                     voto.block = novoBloco
                     voto.save()
-
-        #cmd = 'echo $(date) >> ' + settings.PROJECT_PATH  + '/teste.txt'
-        #os.system(cmd)

@@ -25,3 +25,22 @@ class BlockSerializer(serializers.ModelSerializer):
 class InfoChainSerializer(serializers.Serializer):
     depth = serializers.IntegerField()
     difficulty = serializers.IntegerField()
+    status = serializers.CharField()
+
+class BlockchainSerializer(serializers.ModelSerializer):
+
+    block = serializers.HyperlinkedRelatedField(
+        read_only=True,
+        view_name='blockDetail',
+        source='index'
+    )
+
+    class Meta:
+        model = Block
+        fields = '__all__'
+
+    def to_representation(self, instance):
+        representation = super(BlockchainSerializer, self).to_representation(instance)
+        return {
+            instance.__str__(): representation['block']
+        }
