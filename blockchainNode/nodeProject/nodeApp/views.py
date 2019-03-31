@@ -59,7 +59,7 @@ def Status(request):
     queryset = [{
         "depth" : Block.objects.count(),
         "difficulty" : getCurrentDifficulty(),
-        "status" : "Válida" if isChainValid() else "Inválida"
+        "status" : isChainValid()
     }]
     return Response(InfoChainSerializer(queryset, many=True).data)
 

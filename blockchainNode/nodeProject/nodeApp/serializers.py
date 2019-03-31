@@ -32,12 +32,12 @@ class BlockchainSerializer(serializers.ModelSerializer):
     block = serializers.HyperlinkedRelatedField(
         read_only=True,
         view_name='blockDetail',
-        source='index'
+        source='index',
     )
 
     class Meta:
         model = Block
-        fields = '__all__'
+        fields = ['block']
 
     def to_representation(self, instance):
         representation = super(BlockchainSerializer, self).to_representation(instance)

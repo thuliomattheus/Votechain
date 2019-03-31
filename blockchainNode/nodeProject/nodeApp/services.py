@@ -52,13 +52,16 @@ def isChainValid():
 
     # Se não houverem blocos, é válida
     if(not blockchain):
-        return True
+        return "Válida"
 
     # Para todos os blocos da blockchain
     for currentBlock in blockchain:
         if(not currentBlock.isValid()):
-            return False
-    return True
+            if(currentBlock.index == (len(blockchain)-1) and
+                currentBlock.currentBlockHash=="1"*64):
+                return "Validando"
+            return "Inválida"
+    return "Válida"
 
 # Função para retornar a dificuldade atualizada do bloco atual
 def getCurrentDifficulty():

@@ -4,6 +4,6 @@
     content: "";
 }
 
-.breadcrumb li.active a {
-    color: #0bf;
+.breadcrumb li.active a, a .str {
+    color: #195f91;
 }

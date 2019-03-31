@@ -6,4 +6,6 @@
 #!*/
 #!.gitignore
 #lib
-
+*__pycache__*
+.vscode
+tccVEnv
