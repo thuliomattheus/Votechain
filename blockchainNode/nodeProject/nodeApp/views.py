@@ -6,7 +6,7 @@ from nodeProject.nodeApp.models import Block, Vote
 from nodeProject.nodeApp.services import proofOfWork, getCurrentDifficulty, isChainValid
 import json
 
-class VoteList(CreateAPIView):
+class Vote(CreateAPIView):
     queryset = Vote.objects.all()
     serializer_class = VoteSerializer
 
@@ -89,11 +89,4 @@ def LastBlock(request):
     with open("nodeProject/nodeApp/blockchain.json", "r") as read_file:
         blockchainData = json.load(read_file)
     return JsonResponse(blockchainData, json_dumps_params={'indent':3, 'ensure_ascii':False}, safe=False)
-
-def minerarBloco(request, blocoId):
-    block = get_object_or_404(Block, pk=blocoId)
-    block.setHash()
-    block.save()
-    dados = {'bloco' : block, 'blocoId' : blocoId}
-    return render(request, 'verDados.html', dados)
 """

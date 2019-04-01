@@ -16,7 +16,6 @@ class BrowsableAPIExtendedRenderer(BrowsableAPIRenderer):
                 c = cls(**initkwargs)
                 name = c.get_view_name()
 
-                #breadcrumbs_list.insert(0, (name, pattern))
                 breadcrumbs_list.append((name, pattern))
             except Exception:
                 pass

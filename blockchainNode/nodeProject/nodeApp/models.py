@@ -2,10 +2,10 @@ from django.db import models
 from hashlib import sha256
 from nodeProject.nodeApp import utilities
 
-PRESIDENTE = 'PDT'
-SENADOR = 'SEN'
-GOVERNADOR = 'GOV'
-PREFEITO = 'PRF'
+PRESIDENTE = 'Presidente'
+SENADOR = 'Senador'
+GOVERNADOR = 'Governador'
+PREFEITO = 'Prefeito'
 
 ROLES = (
             (PRESIDENTE,'Presidente'),

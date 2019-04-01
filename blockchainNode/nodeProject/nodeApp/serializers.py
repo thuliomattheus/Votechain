@@ -40,7 +40,6 @@ class BlockchainSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         representation = super(BlockchainSerializer, self).to_representation(instance)
-
         return {
             instance.__str__(): representation['block']
         }
