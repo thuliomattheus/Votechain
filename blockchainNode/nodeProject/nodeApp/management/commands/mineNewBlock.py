@@ -24,7 +24,8 @@ class Command(BaseCommand):
             if(queryset):
 
                 # Índice do novo bloco
-                index = Block.objects.count()
+                # Começa com 1
+                index = Block.objects.count() + 1
 
                 # Serialização dos votos
                 serializer = VoteSerializer(queryset, many=True)
@@ -33,7 +34,7 @@ class Command(BaseCommand):
                 votes = json.dumps(serializer.data, indent=3, ensure_ascii=False)
 
                 # Caso o bloco adicionado seja o bloco genesis
-                if(index == 0):
+                if(index == 1):
                     previousBlockHash = "0" * 64
                 # Caso contrário
                 else:

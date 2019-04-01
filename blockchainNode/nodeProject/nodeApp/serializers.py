@@ -10,6 +10,10 @@ class VoteSerializer(serializers.ModelSerializer):
         fields = ('voterPubKey', 'candidateRole', 'candidateNumber', 'digitalSignature')
 
 class BlockSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Block
+        fields = ('__all__')
+
     # Método para alterar o formato dos votos de string para json
     def to_representation(self, instance):
         # Chamada ao método original da super classe
@@ -18,16 +22,15 @@ class BlockSerializer(serializers.ModelSerializer):
         representation['votes'] = json.loads(instance.votes)
         return representation
 
-    class Meta:
-        model = Block
-        fields = ('__all__')
-
 class InfoChainSerializer(serializers.Serializer):
     depth = serializers.IntegerField()
     difficulty = serializers.IntegerField()
     status = serializers.CharField()
 
 class BlockchainSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Block
+        fields = ['block']
 
     block = serializers.HyperlinkedRelatedField(
         read_only=True,
@@ -35,12 +38,9 @@ class BlockchainSerializer(serializers.ModelSerializer):
         source='index',
     )
 
-    class Meta:
-        model = Block
-        fields = ['block']
-
     def to_representation(self, instance):
         representation = super(BlockchainSerializer, self).to_representation(instance)
+
         return {
             instance.__str__(): representation['block']
         }

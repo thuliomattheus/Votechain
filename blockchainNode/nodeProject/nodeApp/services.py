@@ -57,7 +57,7 @@ def isChainValid():
     # Para todos os blocos da blockchain
     for currentBlock in blockchain:
         if(not currentBlock.isValid()):
-            if(currentBlock.index == (len(blockchain)-1) and
+            if(currentBlock.index == len(blockchain) and
                 currentBlock.currentBlockHash=="1"*64):
                 return "Validando"
             return "Inválida"
@@ -67,7 +67,7 @@ def isChainValid():
 def getCurrentDifficulty():
 
     # Quantidade de blocos por "rodada"
-    roundSize = 2
+    roundSize = 3
 
     # Tamanho atual da blockchain
     blockchainLength = Block.objects.count()
@@ -79,7 +79,7 @@ def getCurrentDifficulty():
     else:
 
         # Último bloco
-        lastBlock = Block.objects.get(index = blockchainLength - 1)
+        lastBlock = Block.objects.get(index = blockchainLength)
         # Dificuldade do último bloco
         lastBlockDifficulty = lastBlock.difficulty
 
@@ -87,9 +87,9 @@ def getCurrentDifficulty():
         if(blockchainLength%roundSize==0):
 
             # Índice da rodada anterior
-            lastRoundIndex = (blockchainLength//roundSize - 1)
+            lastRoundIndex = (blockchainLength//roundSize)
             # Primeiro bloco da rodada anterior
-            lastRoundFirstBlock = Block.objects.get(index = roundSize * lastRoundIndex)
+            lastRoundFirstBlock = Block.objects.get(index = roundSize * (lastRoundIndex-1) + 1)
             # Período de minutos entre o primeiro e o último bloco da última rodada
             minuteDifference = (lastBlock.timestamp - lastRoundFirstBlock.timestamp).seconds/60
 

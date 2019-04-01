@@ -10,16 +10,6 @@ class VoteList(CreateAPIView):
     queryset = Vote.objects.all()
     serializer_class = VoteSerializer
 
-class BlockchainList(ListAPIView):
-    validBlocks = []
-
-    for block in Block.objects.all():
-        if(block.isValid()):
-            validBlocks.append(block)
-
-    queryset = validBlocks
-    serializer_class = BlockchainSerializer
-
 class BlockDetail(RetrieveAPIView):
     queryset = Block.objects.all()
     serializer_class = BlockSerializer
@@ -52,6 +42,26 @@ class BlockDetail(RetrieveAPIView):
         # Renderização da página
         return Response(serializer.data)
         """
+
+# Recuperar a lista de blocos
+@api_view(['GET'])
+def BlockList(request):
+
+    queryset = []
+
+    for block in Block.objects.all():
+        if(block.isValid()):
+            queryset.append(block)
+
+    return Response(
+        BlockchainSerializer(
+            instance = queryset,
+            many = True,
+            context = {
+                'request':request
+            }
+        ).data)
+
 
 # Recuperar as informações básicas da cadeia
 @api_view(['GET'])

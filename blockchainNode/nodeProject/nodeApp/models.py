@@ -53,7 +53,7 @@ class Block(models.Model):
             return False
 
         # Caso específico do bloco genesis:
-        if(self.index==0):
+        if(self.index==1):
             if(self.previousBlockHash != "0"*64):
                 return False
 
