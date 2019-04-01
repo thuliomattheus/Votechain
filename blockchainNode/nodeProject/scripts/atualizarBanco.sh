@@ -1,8 +1,9 @@
 #! /bin/bash
 cd ~/Documentos/TCC/blockchainNode
-rm db.sqlite3
+rm nodeDatabase.sqlite3
 rm -r nodeProject/nodeApp/migrations
-python manage.py makemigrations nodeApp
+rm -r nodeProject/voteReusableApp/migrations
+python manage.py makemigrations nodeApp voteReusableApp
 python manage.py migrate
 cd -
 

@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'nodeProject.voteReusableApp',
     'nodeProject.nodeApp'
 ]
 
@@ -72,7 +73,7 @@ WSGI_APPLICATION = 'nodeProject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': os.path.join(BASE_DIR, 'nodeDatabase.sqlite3'),
     }
 }
 
