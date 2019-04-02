@@ -74,7 +74,7 @@ def getCurrentDifficulty():
 
     # Dificuldade inicial da blockchain
     if(blockchainLength==0):
-        return 4
+        return 5
 
     else:
 

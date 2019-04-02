@@ -71,16 +71,23 @@ def Status(request):
         "difficulty" : getCurrentDifficulty(),
         "status" : isChainValid()
     }]
-    return Response(InfoChainSerializer(queryset, many=True).data)
+    return Response(BlockchainStatusSerializer(queryset, many=True).data)
 
-# Recuperar o último bloco
+# Recuperar o último bloco válido
 @api_view(['GET'])
-def LastBlock(request):
+def LastValidBlock(request):
+
+    # Se a blockchain estiver vazia, retorne uma lista vazia
     if(Block.objects.count()==0):
         return Response([])
+
     else:
-        queryset = [Block.objects.order_by('-pk')[0]]
-        return Response(BlockSerializer(queryset, many=True).data)
+        for block in Block.objects.order_by('-pk'):
+            if(block.isValid()):
+                # Retorne o último bloco válido da blockchain
+                return Response(BlockSerializer([block], many=True).data)
+        # Se nenhum bloco for válido, retorne uma lista vazia
+        return Response([])
 
 """
     with open("nodeProject/nodeApp/blockchain2.json", "a") as write_file:

@@ -4,7 +4,7 @@ from nodeProject.nodeApp import views
 
 urlpatterns = [
     path('blockchain/', views.BlockList, name='blockList'),
-    path('blockchain/lastBlock/', views.LastBlock, name='lastBlock'),
+    path('blockchain/lastValidBlock/', views.LastValidBlock, name='lastValidBlock'),
     path('blockchain/status/', views.Status, name='blockchainStatus'),
     path('blockchain/vote/', views.Vote.as_view(), name='vote'),
     path('blockchain/block/<int:pk>/', views.BlockDetail.as_view(), name='blockDetail'),

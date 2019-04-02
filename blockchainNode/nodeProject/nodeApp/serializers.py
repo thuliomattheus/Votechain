@@ -22,11 +22,6 @@ class BlockSerializer(serializers.ModelSerializer):
         representation['votes'] = json.loads(instance.votes)
         return representation
 
-class InfoChainSerializer(serializers.Serializer):
-    depth = serializers.IntegerField()
-    difficulty = serializers.IntegerField()
-    status = serializers.CharField()
-
 class BlockchainSerializer(serializers.ModelSerializer):
     class Meta:
         model = Block
@@ -43,3 +38,8 @@ class BlockchainSerializer(serializers.ModelSerializer):
         return {
             instance.__str__(): representation['block']
         }
+
+class BlockchainStatusSerializer(serializers.Serializer):
+    Depth = serializers.IntegerField(source='depth')
+    Difficulty = serializers.IntegerField(source='difficulty')
+    Status = serializers.CharField(source='status')
