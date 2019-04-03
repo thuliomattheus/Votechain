@@ -1,8 +1,7 @@
 from rest_framework import serializers
 from nodeProject.nodeApp.models import Block, Vote
-from nodeProject.nodeApp import utilities
+from nodeProject.nodeApp import services
 import json
-from datetime import datetime
 
 class VoteSerializer(serializers.ModelSerializer):
     class Meta:
@@ -14,11 +13,20 @@ class BlockSerializer(serializers.ModelSerializer):
         model = Block
         fields = ('__all__')
 
-    # Método para alterar o formato dos votos de string para json
     def to_representation(self, instance):
-        # Chamada ao método original da super classe
+
+        # Caso existam blocos inválidos
+        if(services.getBlockchainSyncStatus()=="Inválida"):
+            # Caso esse bloco seja inválido
+            if(not services.isBlockValid(instance)):
+                return { "details" : "Bloco inválido!"}
+        # Caso um bloco esteja sob validação
+        elif(services.getBlockchainSyncStatus()=="Validando"):
+            # Caso seja o bloco sob validação
+            if(not instance.isValid()):
+                return { "details" : "Bloco em validação!"}
+        # Caso de blocos válidos
         representation = super(BlockSerializer, self).to_representation(instance)
-        # Sobrescrita do método padrão para mostrar os votos formatados como json
         representation['votes'] = json.loads(instance.votes)
         return representation
 
@@ -34,12 +42,42 @@ class BlockchainSerializer(serializers.ModelSerializer):
     )
 
     def to_representation(self, instance):
+
+        # Chamada ao método herdado
         representation = super(BlockchainSerializer, self).to_representation(instance)
-        return {
-            instance.__str__(): representation['block']
-        }
+
+        # Caso a blockchain seja válida
+        if(services.getBlockchainSyncStatus()=="Válida"):
+            return { instance.__str__(): str(representation['block'])}
+
+        # Caso a blockchain esteja em validação
+        elif(services.getBlockchainSyncStatus()=="Validando"):
+            # Caso o atual bloco seja válido
+            if(instance.isValid()):
+                return {
+                    instance.__str__() :  str(representation['block']) + " - Bloco Válido"
+                }
+            # Caso o atual bloco esteja em validação
+            else:
+                return {
+                    instance.__str__() :  str(representation['block']) + " - Bloco em validação"
+                }
+
+        # Caso a blockchain esteja inválida
+        else:
+            # Caso o atual bloco seja válido
+            if(services.isBlockValid(instance)):
+                return {
+                    instance.__str__() :  str(representation['block']) + " - Bloco Válido"
+                }
+            # Caso o atual bloco seja inválido
+            else:
+                return {
+                    instance.__str__() :  str(representation['block']) + " - Bloco Inválido"
+                }
 
 class BlockchainStatusSerializer(serializers.Serializer):
-    Depth = serializers.IntegerField(source='depth')
+
+    Size = serializers.IntegerField(source='size')
     Difficulty = serializers.IntegerField(source='difficulty')
     Status = serializers.CharField(source='status')

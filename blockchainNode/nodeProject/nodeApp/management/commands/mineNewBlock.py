@@ -15,7 +15,7 @@ class Command(BaseCommand):
     def execute(self, *args, **options):
 
         # Só adiciona novos blocos, se o último já tiver sido validado
-        if(services.isChainValid()):
+        if(services.getBlockchainSyncStatus() == "Válida"):
 
             # Votos que serão atribuídos ao novo bloco
             queryset = Vote.objects.filter(block_id=None)[0:5]

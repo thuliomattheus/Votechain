@@ -46,7 +46,7 @@ def proofOfWork(sender, instance, created, **kwargs):
         instance.save()
 
 # Verificação da validação da blockchain
-def isChainValid():
+def getBlockchainSyncStatus():
 
     blockchain = Block.objects.all()
 
@@ -103,3 +103,47 @@ def getCurrentDifficulty():
 
         # Repete a dificuldade do bloco anterior
         return lastBlockDifficulty
+
+# Função para retornar o último bloco da blockchain ou None
+def getLastValidBlockIndex():
+
+    # Se a blockchain estiver vazia, retorne 0
+    if(Block.objects.count()==0):
+        return 0
+
+    else:
+        # Caso a blockchain seja válida ou esteja em validação
+        if(getBlockchainSyncStatus()!="Inválida"):
+            # Percorra-a de maneira decrescente
+            for block in Block.objects.order_by('-pk'):
+                # Retorne o primeiro bloco válido encontrado
+                if(block.isValid()):
+                    return block.index
+
+        # Caso a blockchain seja inválida
+        else:
+            # Percorra-a de maneira crescente
+            for block in Block.objects.order_by('pk'):
+                # Itere até encontrar um bloco inválido
+                if(not block.isValid()):
+                    # Caso o primeiro bloco inválido, seja o primeiro bloco da cadeia
+                    if(block.index==1):
+                        return None
+                    # Retorne o bloco anterior
+                    else:
+                        return (block.index-1)
+
+        # Se nenhum bloco for válido, retorne None
+        return None
+
+# Função para saber se o bloco é válido, quando a cadeia é inválida
+def isBlockValid(block):
+    return True if block.index <= getLastValidBlockIndex() else False
+
+# Função para mostrar as principais informações da blockchain
+def getBlockchainStatus():
+    return [{
+        'size' : Block.objects.count(),
+        'difficulty' : getCurrentDifficulty(),
+        'status' : getBlockchainSyncStatus()
+    }]
