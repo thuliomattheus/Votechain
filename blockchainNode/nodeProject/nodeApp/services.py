@@ -74,7 +74,7 @@ def getCurrentDifficulty():
 
     # Dificuldade inicial da blockchain
     if(blockchainLength==0):
-        return 5
+        return 4
 
     else:
 
@@ -128,13 +128,13 @@ def getLastValidBlockIndex():
                 if(not block.isValid()):
                     # Caso o primeiro bloco inválido, seja o primeiro bloco da cadeia
                     if(block.index==1):
-                        return None
+                        return -1
                     # Retorne o bloco anterior
                     else:
                         return (block.index-1)
 
-        # Se nenhum bloco for válido, retorne None
-        return None
+        # Se nenhum bloco for válido, retorne -1
+        return -1
 
 # Função para saber se o bloco é válido, quando a cadeia é inválida
 def isBlockValid(block):
