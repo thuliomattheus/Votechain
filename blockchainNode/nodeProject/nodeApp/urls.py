@@ -8,6 +8,7 @@ urlpatterns = [
     path('blockchain/status/', views.Status, name='blockchainStatus'),
     path('blockchain/vote/', views.Vote.as_view(), name='vote'),
     path('blockchain/block/<int:pk>/', views.BlockDetail, name='blockDetail'),
+    path('miningBlock', views.miningBlock, name='miningBlock')
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

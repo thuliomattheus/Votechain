@@ -19,13 +19,13 @@ class BlockSerializer(serializers.ModelSerializer):
         if(services.getBlockchainSyncStatus()=="Inválida"):
             # Caso esse bloco seja inválido
             if(not services.isBlockValid(instance)):
-                return { "details" : "Invalid block."}
+                return {"details" : "Invalid block."}
 
         # Caso um bloco esteja sob validação
         elif(services.getBlockchainSyncStatus()=="Validando"):
             # Caso seja o bloco sob validação
             if(not instance.isValid()):
-                return { "details" : "Validating block."}
+                return {"details" : "Validating block."}
 
         # Caso de blocos válidos
         representation = super(BlockSerializer, self).to_representation(instance)
@@ -50,7 +50,9 @@ class BlockchainSerializer(serializers.ModelSerializer):
 
         # Caso a blockchain seja válida
         if(services.getBlockchainSyncStatus()=="Válida"):
-            return { instance.__str__(): str(representation['block'])}
+            return {
+                instance.__str__(): str(representation['block'])
+            }
 
         # Caso a blockchain esteja em validação
         elif(services.getBlockchainSyncStatus()=="Validando"):
@@ -82,22 +84,19 @@ class LastBlockSerializer(serializers.Serializer):
 
     def to_representation(self, instance):
 
-        print(instance)
-
         # Se nenhum bloco for válido, retorne uma mensagem indicativa
         if(instance==-1):
-            return { "details" : "Blockchain doesn't have valid blocks."}
+            return {"details" : "Blockchain doesn't have valid blocks."}
 
         # Se a blockchain estiver vazia, retorne uma lista vazia
         elif(instance==0):
-            return { "details" : "Blockchain is empty."}
+            return {"details" : "Blockchain is empty."}
 
         else:
             block = Block.objects.get(index=instance)
             return BlockSerializer(block).data
 
 class BlockchainStatusSerializer(serializers.Serializer):
-
     Size = serializers.IntegerField(source='size')
     Difficulty = serializers.IntegerField(source='difficulty')
     Synchronization = serializers.CharField(source='status')

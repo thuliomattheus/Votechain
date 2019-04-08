@@ -8,13 +8,9 @@
 
 <!-- Lista de páginas de estilo css -->
 {% block style %}
-
     {{ block.super }}
-    <link rel="stylesheet" type="text/css" href="/static/rest_framework/css/myStyle.css"/>
-
+    <link rel="stylesheet" type="text/css" href="{% static 'css/myStyle.css' %}"/>
 {% endblock %}
-
-
 
 <!-- Título da página na tela -->
 {% block branding %}
@@ -22,8 +18,6 @@
     Blockchain Votation Node
 </a>
 {% endblock %}
-
-
 
 <!-- Lista de funcionalidades do Node -->
 {% block breadcrumbs %}
@@ -37,8 +31,6 @@
   {% endfor %}
 </ul>
 {% endblock %}
-
-
 
 <!-- Opções disponíveis na tela -->
 {% block request_forms %}
@@ -68,5 +60,35 @@
         </form>
     {% endif %}
 
-{% endblock request_forms %}
+{% endblock %}
 
+
+<!-- Inclusão do gif de "minerando" -->
+{% block content %}
+    {{ block.super }}
+    <img src="{% static 'image/calculator.gif' %}" id="calculatorAjax" 
+        style = "
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            overflow: hidden; /*to remove scrollbars */
+            display: none; /*to make it visible only on fadeIn() function */"
+    />
+{% endblock %}
+
+{% block script %}
+    {{ block.super }}
+
+    <script>
+        $(document).ready(function() {
+            $.ajax({
+                url: '{% url "miningBlock" %}',
+                data: {},
+                complete: function (data) {
+                    //$("#calculatorAjax").show();
+                },
+            });
+        });
+
+    </script>
+{% endblock %}

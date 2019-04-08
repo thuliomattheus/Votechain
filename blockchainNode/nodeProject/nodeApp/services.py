@@ -142,8 +142,8 @@ def isBlockValid(block):
 
 # Função para mostrar as principais informações da blockchain
 def getBlockchainStatus():
-    return [{
+    return {
         'size' : Block.objects.count(),
         'difficulty' : getCurrentDifficulty(),
         'status' : getBlockchainSyncStatus()
-    }]
+    }
