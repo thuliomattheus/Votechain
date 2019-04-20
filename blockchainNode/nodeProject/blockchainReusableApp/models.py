@@ -28,3 +28,11 @@ class AbstractVote(models.Model):
 
     def getCandidatePublicKey(self):
         return (self.candidateRole + str(self.candidateNumber))
+
+class AbstractSeeder(models.Model):
+    ip = models.CharField(max_length=15, blank=False, null=False)
+    port = models.PositiveIntegerField(blank=False, null=False)
+    host = models.CharField(max_length=80)
+
+    class Meta:
+        abstract = True

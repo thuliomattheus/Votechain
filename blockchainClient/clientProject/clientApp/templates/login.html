@@ -1,0 +1,59 @@
+{% load static %}
+{% load widget_tweaks %}
+
+<html>
+<head>
+    <title>TCC</title>
+    <link rel="stylesheet" href="{% static 'css/stylesheet.css' %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div class="login">
+        <h1>Acessar conta</h1>
+        <br/>
+        <form method="POST">{% csrf_token %}
+                {% for hidden_field in form.hidden_fields %}
+                {{ hidden_field }}
+              {% endfor %}
+              
+              {% if form.non_field_errors %}
+                <div class="alert alert-danger" role="alert">
+                  {% for error in form.non_field_errors %}
+                    {{ error }}
+                  {% endfor %}
+                </div>
+              {% endif %}
+              
+              {% for field in form.visible_fields %}
+                <div class="form-group">
+                  {{ field.label_tag }}
+              
+                  {% if form.is_bound %}
+                    {% if field.errors %}
+                      {% render_field field class="form-control is-invalid" %}
+                      {% for error in field.errors %}
+                        <div class="invalid-feedback">
+                          {{ error }}
+                        </div>
+                      {% endfor %}
+                    {% else %}
+                      {% render_field field class="form-control is-valid" %}
+                    {% endif %}
+                  {% else %}
+                    {% render_field field class="form-control" %}
+                  {% endif %}
+              
+                  {% if field.help_text %}
+                    <small class="form-text text-muted">{{ field.help_text }}</small>
+                  {% endif %}
+                </div>
+              {% endfor %}
+            <a href="{% url 'register' %}">Criar conta</a>
+            <button type="submit">Acessar</button>
+        </form>
+    </div>
+</body>
+</html>

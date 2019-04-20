@@ -1,7 +1,7 @@
 from django.db import models
 from hashlib import sha256
 from nodeProject.nodeApp import utilities
-from nodeProject.voteReusableApp.models import AbstractVote
+from nodeProject.blockchainReusableApp.models import AbstractVote, AbstractSeeder
 
 class Block(models.Model):
     index = models.PositiveIntegerField(primary_key=True, blank=False, null=False)
@@ -61,7 +61,5 @@ class Vote(AbstractVote):
     def getBlock(self):
         return (self.block)
 
-class Seed(models.Model):
-    ip = models.CharField(max_length=15, blank=False, null=False)
-    port = models.PositiveIntegerField(blank=False, null=False)
-    host = models.CharField(max_length=80)
+class Seeder(AbstractSeeder):
+    pass

@@ -38,6 +38,7 @@ class Command(BaseCommand):
                     previousBlockHash = "0" * 64
                 # Caso contrário
                 else:
+                    # Recupere o hash atual do último bloco da blockchain
                     previousBlockHash = Block.objects.order_by('-pk')[0].currentBlockHash
 
                 # Incrementador inicial utilizado na mineração do bloco
@@ -59,6 +60,7 @@ class Command(BaseCommand):
                     nonce = nonce,
                     previousBlockHash = previousBlockHash,
                 )
+
                 # Commit no banco
                 novoBloco.save()
 

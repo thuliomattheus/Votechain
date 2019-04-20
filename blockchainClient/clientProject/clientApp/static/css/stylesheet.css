@@ -1,0 +1,37 @@
+html, body{
+    height: 100%;
+    margin: 0 auto;
+}
+
+body{
+    background-image: url("../image/blockchain.jpg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-attachment: fixed;
+}
+
+div.login{
+    background-color: mediumturquoise;
+    position: absolute;
+    padding: 1.5%;
+    justify-content: center;
+    margin-top: 1%;
+    margin-left: 34%;
+}
+
+div.login small{
+    color: lightgray;
+}
+
+div.login h1, div.login button{
+    display: flex;
+    justify-content: center;
+    margin: auto;
+}
+
+div.login a{
+    color: brown;
+    justify-items: right;
+    display: grid;
+    margin-bottom: 2%;
+}

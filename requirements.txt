@@ -1,2 +1,10 @@
+# Framework Principal
 Django~=2.1.7
+# Framework para criação de api's rest
 DjangoRestFramework~=3.9.2
+# Biblioteca para enviar e receber comandos para uma api rest
+requests~=2.21.0
+# Biblioteca de criptografia
+cryptography~=2.6.1
+# Biblioteca para tornar os formulários mais personalizáveis
+django-widget-tweaks~=1.4.3
