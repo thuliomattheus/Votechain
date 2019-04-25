@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from clientProject.clientApp import models
 
-class VoterSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.User
         fields = '__all__'
