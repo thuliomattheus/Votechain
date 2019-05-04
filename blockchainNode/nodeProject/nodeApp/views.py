@@ -35,6 +35,14 @@ class Vote(CreateAPIView):
     queryset = Vote.objects.all()
     serializer_class = VoteSerializer
 
+@api_view(['POST'])
+def ToVote(request):
+    vote = VoteSerializer(data=request.data)
+    if(vote.is_valid()):
+        vote.save()
+        return JsonResponse({ 'status' : 'Voto cadastrado com sucesso!'})
+    return JsonResponse({ 'status' : 'Voto inválido!'})
+
 def miningBlock(request):
     while(services.getBlockchainStatus().get('status')=="Validando"):
         continue

@@ -6,7 +6,7 @@ urlpatterns = [
     path('blockchain/', views.BlockList, name='blockList'),
     path('blockchain/lastValidBlock/', views.LastValidBlock, name='lastValidBlock'),
     path('blockchain/status/', views.Status, name='blockchainStatus'),
-    path('blockchain/vote/', views.Vote.as_view(), name='vote'),
+    path('blockchain/vote/', views.ToVote, name='vote'),
     path('blockchain/block/<int:pk>/', views.BlockDetail, name='blockDetail'),
     path('miningBlock', views.miningBlock, name='miningBlock')
 ]

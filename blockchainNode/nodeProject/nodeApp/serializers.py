@@ -8,6 +8,37 @@ class VoteSerializer(serializers.ModelSerializer):
         model = Vote
         fields = ('voterPubKey', 'candidateRole', 'candidateNumber', 'digitalSignature')
 
+    """
+    def to_representation(self, instance):
+
+        # Caso existam blocos inválidos
+        if(services.getBlockchainSyncStatus()=="Inválida"):
+            # Caso esse bloco seja inválido
+            if(not services.isBlockValid(instance)):
+                return {"details" : "Invalid block."}
+
+        # Caso um bloco esteja sob validação
+        elif(services.getBlockchainSyncStatus()=="Validando"):
+            # Caso seja o bloco sob validação
+            if(not instance.isValid()):
+                return {"details" : "Validating block."}
+
+        # Caso de blocos válidos
+        representation = super(BlockSerializer, self).to_representation(instance)
+        representation['votes'] = json.loads(instance.votes)
+        return representation
+
+
+        message = "oi muchachos"
+        verification = verifySignature(signature, message, request.user.publicKey)
+        teste = "\nMensagem verificada" if verification else "\nDEU ERRADO"
+        verification = verifySignature(signature, message+"\n", request.user.publicKey)
+        teste += "\nMensagem verificada" if verification else "\nDEU ERRADO"
+        verification = verifySignature(signature, message, request.user.publicKey)
+        teste += "\nMensagem verificada" if verification else "\nDEU ERRADO"
+    """
+
+
 class BlockSerializer(serializers.ModelSerializer):
     class Meta:
         model = Block

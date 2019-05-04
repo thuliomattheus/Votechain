@@ -4,7 +4,7 @@ from django.urls import reverse
 import requests
 from clientProject.clientApp.models import Vote, User
 from clientProject.clientApp.forms import RegisterForm, VoteForm
-from clientProject.clientApp.utilities import generateKeys, signMessage, verifySignature
+from clientProject.blockchainReusableApp.utilities import generateKeys, signMessage, verifySignature
 from django.contrib.auth.decorators import login_required
 
 def register(request):
@@ -38,34 +38,13 @@ def vote(request):
                 str(form.fields['candidateRole'])+str(form.fields['candidateNumber'])
             )
             vote.save()
+
+            url = 'http://localhost:8000/blockchain/vote/'
+            jsonResponse = requests.post(url, data=vote.__dict__)
+
             return HttpResponseRedirect(reverse('login'))
         else:
             print(form.errors)
     else:
         form = VoteForm()
     return render(request, 'vote.html', {'form': form})
-
-@login_required
-def teste2(request):
-    message = "oi muchachos"
-    verification = verifySignature(signature, message, request.user.publicKey)
-    teste = "\nMensagem verificada" if verification else "\nDEU ERRADO"
-    verification = verifySignature(signature, message+"\n", request.user.publicKey)
-    teste += "\nMensagem verificada" if verification else "\nDEU ERRADO"
-    verification = verifySignature(signature, message, request.user.publicKey)
-    teste += "\nMensagem verificada" if verification else "\nDEU ERRADO"
-
-    return render(request, 'teste.html', {'teste': teste})
-
-@login_required
-def teste(request):
-    url = 'http://localhost:8000/blockchain/vote/'
-    data = {
-        'voterPubKey': 123,
-        'candidateRole': Vote.SENADOR,
-        'candidateNumber': 123,
-        'digitalSignature': '7897z9asas979sasdasd'
-    }
-    jsonResponse = requests.post(url, data=data)
-
-    return HttpResponse(jsonResponse, content_type="application/json")
