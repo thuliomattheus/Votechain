@@ -28,23 +28,24 @@ def generateKeys():
         format=serialization.PublicFormat.PKCS1,
     )
 
-    return privateKey, publicKey
+    return privateKey.decode('utf-8'), publicKey.decode('utf-8')
 
 def signMessage(privateKey, message):
 
-    # Converte a chave de string para byte
-    private_key = privateKey.encode('utf-8')
+    # Converte chave e mensagem, de string para byte
+    encoded_private_key = privateKey.encode('utf-8')
+    encoded_message = message.encode('utf-8')
 
     # Deserializa a chave privada
-    private_key = serialization.load_pem_private_key(
-        data=private_key,
+    deserialized_private_key = serialization.load_pem_private_key(
+        data=encoded_private_key,
         password=None,
         backend=default_backend()
     )
 
     # Assina a mensagem com a chave privada
-    signature = private_key.sign(
-        message.encode('utf-8'),
+    signature = deserialized_private_key.sign(
+        encoded_message,
         padding.PSS(
             mgf=padding.MGF1(hashes.SHA256()),
             salt_length=padding.PSS.MAX_LENGTH
@@ -52,22 +53,30 @@ def signMessage(privateKey, message):
         hashes.SHA256()
     )
 
-    return str(base64.b64encode(signature), encoding='utf-8')
+    return base64.b64encode(signature).decode('utf-8')
 
 def verifySignature(signature, message, senderPublicKey):
-    # Converte a chave de string para byte
-    public_key = senderPublicKey.encode('utf-8')
 
-    # Deserializa a chave pública
-    public_key = serialization.load_pem_public_key(
-        data=public_key,
-        backend=default_backend()
-    )
+    # Converte chave e mensagem, de string para byte
+    encoded_public_key = senderPublicKey.encode('utf-8')
+    encoded_message = message.encode('utf-8')
+
+    decoded_signature = base64.b64decode(signature)
 
     try:
-        public_key.verify(
-            signature,
-            message.encode('utf-8'),
+        # Deserializa a chave pública
+        deserialized_public_key = serialization.load_pem_public_key(
+            data=encoded_public_key,
+            backend=default_backend()
+        )
+    except ValueError:
+        print("Não dá pra deserializar os dados!")
+        return False
+
+    try:
+        deserialized_public_key.verify(
+            decoded_signature,
+            encoded_message,
             padding.PSS(
                 mgf=padding.MGF1(hashes.SHA256()),
                 salt_length=padding.PSS.MAX_LENGTH
@@ -77,4 +86,5 @@ def verifySignature(signature, message, senderPublicKey):
         return True
 
     except InvalidSignature:
+        print("Assinatura inválida!")
         return False

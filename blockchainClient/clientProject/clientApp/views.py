@@ -35,7 +35,8 @@ def vote(request):
             vote.voterPubKey = request.user.publicKey
             vote.digitalSignature = signMessage(
                 request.user.privateKey,
-                str(form.fields['candidateRole'])+str(form.fields['candidateNumber'])
+                vote.getCandidate()
+                #form.cleaned_data['candidateRole']) + form.cleaned_data['candidateNumber'])
             )
             vote.save()
 

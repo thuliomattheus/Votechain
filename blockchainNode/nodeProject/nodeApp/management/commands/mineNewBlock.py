@@ -5,6 +5,7 @@ from nodeProject.nodeApp.models import Block, Vote
 from nodeProject.nodeApp.serializers import VoteSerializer
 from nodeProject.nodeApp import services
 from nodeProject.nodeApp import utilities
+from nodeProject.blockchainReusableApp.utilities import verifySignature
 import os
 import json
 
@@ -17,21 +18,30 @@ class Command(BaseCommand):
         # Só adiciona novos blocos, se o último já tiver sido validado
         if(services.getBlockchainSyncStatus() == "Válida"):
 
+            # Retorna todos os votos
+            allVotes = Vote.objects.all()
+
+            # Remove os votos que não possuem assinatura válida
+            for vote in allVotes:
+                if(not verifySignature(vote.digitalSignature, vote.getCandidate(), vote.voterPubKey)):
+                    print("O voto " + str(vote.id) + " foi removido")
+                    Vote.objects.filter(id=vote.id).delete()
+
             # Votos que serão atribuídos ao novo bloco
-            queryset = Vote.objects.filter(block_id=None)[0:5]
+            votes = Vote.objects.filter(block_id=None)[0:5]
 
             # Caso a lista de votos não esteja vazia
-            if(queryset):
+            if(votes):
 
                 # Índice do novo bloco
                 # Começa com 1
                 index = Block.objects.count() + 1
 
                 # Serialização dos votos
-                serializer = VoteSerializer(queryset, many=True)
+                serializedVotes = VoteSerializer(votes, many=True)
 
                 # Conversão dos votos serializados em string
-                votes = json.dumps(serializer.data, indent=3, ensure_ascii=False)
+                deserializedVotes = json.dumps(serializedVotes.data, indent=3, ensure_ascii=False)
 
                 # Caso o bloco adicionado seja o bloco genesis
                 if(index == 1):
@@ -52,19 +62,19 @@ class Command(BaseCommand):
 
                 # Criação de um novo objeto do tipo Bloco,
                 # passando apenas os votos e o hash anterior
-                novoBloco = Block(
+                newBlock = Block(
                     index = index,
                     timestamp = timestamp,
-                    votes = votes,
+                    votes = deserializedVotes,
                     difficulty = difficulty,
                     nonce = nonce,
                     previousBlockHash = previousBlockHash,
                 )
 
                 # Commit no banco
-                novoBloco.save()
+                newBlock.save()
 
                 # Atribuição do bloco atual aos votos utilizados
-                for voto in queryset:
-                    voto.block = novoBloco
-                    voto.save()
+                for vote in votes:
+                    vote.block = newBlock
+                    vote.save()

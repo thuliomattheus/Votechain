@@ -26,7 +26,7 @@ class AbstractVote(models.Model):
         return (self.voterPubKey + " votou no(a) candidato(a) à " +
             self.candidateRole + " de número " + str(self.candidateNumber))
 
-    def getCandidatePublicKey(self):
+    def getCandidate(self):
         return (self.candidateRole + str(self.candidateNumber))
 
 class AbstractSeeder(models.Model):
