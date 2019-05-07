@@ -61,7 +61,11 @@ def verifySignature(signature, message, senderPublicKey):
     encoded_public_key = senderPublicKey.encode('utf-8')
     encoded_message = message.encode('utf-8')
 
-    decoded_signature = base64.b64decode(signature)
+    try:
+        decoded_signature = base64.b64decode(signature)
+    except:
+        print("Assinatura não pôde ser decodificada!")
+        return False
 
     try:
         # Deserializa a chave pública
