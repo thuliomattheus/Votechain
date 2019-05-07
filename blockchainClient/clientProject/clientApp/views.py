@@ -21,7 +21,6 @@ def register(request):
         form = RegisterForm()
     return render(request, 'registration/register.html', {'form': form})
 
-
 @login_required
 def index(request):
     return render(request, 'index.html')
@@ -42,6 +41,8 @@ def vote(request):
 
             url = 'http://localhost:8000/blockchain/vote/'
             jsonResponse = requests.post(url, data=vote.__dict__)
+
+            print(jsonResponse.json()['status'])
 
             return HttpResponseRedirect(reverse('login'))
         else:

@@ -6,6 +6,7 @@ from nodeProject.nodeApp.serializers import *
 from nodeProject.nodeApp.models import Block, Vote
 from nodeProject.nodeApp import services
 from django.http import JsonResponse
+from nodeProject.blockchainReusableApp.utilities import verifySignature
 
 # Recupera os dados do bloco
 @api_view(['GET'])
@@ -31,19 +32,20 @@ def LastValidBlock(request):
     lastValidBlockIndex = services.getLastValidBlockIndex()
     return Response(LastBlockSerializer(lastValidBlockIndex).data)
 
-class Vote(CreateAPIView):
-    queryset = Vote.objects.all()
-    serializer_class = VoteSerializer
-
 @api_view(['POST'])
 def ToVote(request):
-    vote = VoteSerializer(data=request.data)
-    if(vote.is_valid()):
-        vote.save()
-        return JsonResponse({ 'status' : 'Voto cadastrado com sucesso!'})
+    form = VoteSerializer(data=request.data)
+    if(form.is_valid()):
+        vote = form.validated_data
+        candidate = vote['candidateRole'] + str(vote['candidateNumber'])
+        if(verifySignature(vote['digitalSignature'], candidate, vote['voterPubKey'])):
+            form.save()
+            return JsonResponse({ 'status' : 'Voto cadastrado com sucesso!'})
     return JsonResponse({ 'status' : 'Voto inválido!'})
 
-def miningBlock(request):
+def MiningBlock(request):
+
     while(services.getBlockchainStatus().get('status')=="Validando"):
         continue
+
     return JsonResponse({ 'status' : 'OK'})
