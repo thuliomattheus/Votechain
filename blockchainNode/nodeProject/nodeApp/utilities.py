@@ -25,9 +25,10 @@ def criptografar(mensagem):
     # Converte o objeto para byte
     digest.update(mensagem.encode('utf-8'))
     # Gera um número randômico, utilizando os limites do tipo 'int' como intervalo
-    salt = randint(-maxsize - 1, maxsize)
+    #salt = randint(-maxsize - 1, maxsize)
     # Concatena o salt com a mensagem
-    digest.update(str(salt).encode('utf-8'))
+    #digest.update(str(salt).encode('utf-8'))
     # Retorna o salt e a mensagem criptografada
-    return salt, b64encode(digest.finalize()).decode('utf-8')
+    #return salt, b64encode(digest.finalize()).decode('utf-8')
+    return b64encode(digest.finalize()).decode('utf-8')
 """

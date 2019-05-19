@@ -36,21 +36,21 @@ def signMessage(privateKey, message):
     encoded_private_key = privateKey.encode('utf-8')
     encoded_message = message.encode('utf-8')
 
-    # Deserializa a chave privada
-    deserialized_private_key = serialization.load_pem_private_key(
+    # Converte a chave privada em seu formato original
+    original_private_key = serialization.load_pem_private_key(
         data=encoded_private_key,
         password=None,
         backend=default_backend()
     )
 
     # Assina a mensagem com a chave privada
-    signature = deserialized_private_key.sign(
-        encoded_message,
+    signature = original_private_key.sign(
+        encoded_message, # Mensagem à ser enviada em byte
         padding.PSS(
             mgf=padding.MGF1(hashes.SHA256()),
             salt_length=padding.PSS.MAX_LENGTH
         ),
-        hashes.SHA256()
+        hashes.SHA256() # Algoritmo à ser usado para criptografar a mensagem
     )
 
     return b64encode(signature).decode('utf-8')
@@ -68,8 +68,8 @@ def verifySignature(signature, message, senderPublicKey):
         return False
 
     try:
-        # Deserializa a chave pública
-        deserialized_public_key = serialization.load_pem_public_key(
+        # Converte a chave pública em seu formato original
+        original_public_key = serialization.load_pem_public_key(
             data=encoded_public_key,
             backend=default_backend()
         )
@@ -78,14 +78,14 @@ def verifySignature(signature, message, senderPublicKey):
         return False
 
     try:
-        deserialized_public_key.verify(
-            decoded_signature,
-            encoded_message,
+        original_public_key.verify(
+            decoded_signature, # Assinatura em byte
+            encoded_message, # Mensagem recebida em byte
             padding.PSS(
                 mgf=padding.MGF1(hashes.SHA256()),
                 salt_length=padding.PSS.MAX_LENGTH
             ),
-            hashes.SHA256()
+            hashes.SHA256() # Algoritmo utilizado para decriptar a mensagem
         )
         return True
 

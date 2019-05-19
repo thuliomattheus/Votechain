@@ -10,8 +10,8 @@ from clientProject.settings import PRIVATE_KEY_FILENAME, PRIVATE_KEY_PATH
 def encryptSha256(message):
     return sha256(message.encode('utf-8')).hexdigest()
 
-def writeMessageOnFile(message, filename=PRIVATE_KEY_FILENAME, path=PRIVATE_KEY_PATH):
-    with open(str(path) + str(filename), 'w') as encryptedMessageFile:
+def writeMessageOnFile(message, filename='', path=PRIVATE_KEY_PATH):
+    with open(str(path) + PRIVATE_KEY_FILENAME + str(filename).title(), 'w') as encryptedMessageFile:
         encryptedMessageFile.write(message) 
 
 """

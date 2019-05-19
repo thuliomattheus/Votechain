@@ -30,7 +30,7 @@ def register(request):
             originalPrivateKey, user.publicKey = generateKeys()
 
             # Criação de um arquivo para guardar a chave privada real, localmente
-            writeMessageOnFile(originalPrivateKey)
+            writeMessageOnFile(originalPrivateKey, user.username)
 
             # Atribuição da chave privada criptografada ao usuário
                 # Com isso, a mesma pode ser guardada com segurança no banco
