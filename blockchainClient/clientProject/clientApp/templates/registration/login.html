@@ -52,6 +52,14 @@
                     </div>
                 {% endfor %}
                 <a href="{% url 'register' %}">Criar conta</a>
+                {% if messages %}
+                    <ul class="messages">
+                        {% for message in messages %}
+                        <li class="{{ message.tags }}">{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+
                 <div class="form-row-last">
                     <input type="submit" name="register" class="register" value="Acessar" >
                     <input type="hidden" name="next" value="{% url 'index' %}">

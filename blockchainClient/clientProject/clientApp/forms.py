@@ -22,6 +22,8 @@ class RegisterForm(UserCreationForm):
 
 class VoteForm(forms.ModelForm):
 
+    privateKey = forms.FileField(required=True, label='Private Key')
+
     def __init__(self, *args, **kwargs):
         super(VoteForm, self).__init__(*args, **kwargs)
         for field in self.fields:
@@ -29,4 +31,4 @@ class VoteForm(forms.ModelForm):
 
     class Meta:
         model = Vote
-        fields = ('candidateRole','candidateNumber')
+        fields = ('candidateRole','candidateNumber', 'privateKey')

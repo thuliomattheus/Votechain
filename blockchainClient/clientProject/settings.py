@@ -1,7 +1,10 @@
 import os
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# Diretório do app
+PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
+
+# Diretório do projeto
+BASE_DIR = os.path.dirname(PROJECT_PATH)
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'c-2px(k-)o_^pf7j3q$ivr7z66!l9m8ar21)oqd1!wfd5*kh)-'
@@ -56,7 +59,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'clientProject.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
@@ -105,6 +107,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+PRIVATE_KEY_PATH = BASE_DIR
+PRIVATE_KEY_FILENAME = '/privateKey'
 
 LOGIN_URL = '/login'
 LOGIN_REDIRECT_URL = '/'

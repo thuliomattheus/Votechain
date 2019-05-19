@@ -4,7 +4,7 @@ from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.hazmat.primitives.asymmetric import padding
 from cryptography.exceptions import InvalidSignature
-import base64
+from base64 import b64encode, b64decode
 
 def generateKeys():
 
@@ -53,7 +53,7 @@ def signMessage(privateKey, message):
         hashes.SHA256()
     )
 
-    return base64.b64encode(signature).decode('utf-8')
+    return b64encode(signature).decode('utf-8')
 
 def verifySignature(signature, message, senderPublicKey):
 
@@ -62,7 +62,7 @@ def verifySignature(signature, message, senderPublicKey):
     encoded_message = message.encode('utf-8')
 
     try:
-        decoded_signature = base64.b64decode(signature)
+        decoded_signature = b64decode(signature)
     except:
         print("Assinatura não pôde ser decodificada!")
         return False
@@ -74,7 +74,7 @@ def verifySignature(signature, message, senderPublicKey):
             backend=default_backend()
         )
     except ValueError:
-        print("Não dá pra deserializar os dados")
+        print("Não dá pra deserializar os dados!")
         return False
 
     try:
@@ -90,5 +90,5 @@ def verifySignature(signature, message, senderPublicKey):
         return True
 
     except InvalidSignature:
-        print("ops")
+        print("Assinatura inválida!")
         return False

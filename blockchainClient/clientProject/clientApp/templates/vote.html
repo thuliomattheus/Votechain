@@ -3,24 +3,20 @@
 {% load widget_tweaks %}
 
 <html>
-<head>
-    <title>TCC</title>
-    <link rel="stylesheet" href="{% static 'css/stylesheet.css' %}">
-    <link rel="stylesheet" href="{% static 'css/nunito-font.css' %}">
-</head>
 
 <body>
     <div class="page-content">
         <div class="form-v6-content">
             {% block content %}
-                <form class="form-detail" method="POST">{% csrf_token %}
+                <form enctype="multipart/form-data" class="form-detail" method="POST">
+                    {% csrf_token %}
                     <h3>Votar</h3>
 
                     <!-- Renderização de campos ocultos -->
                     {% for hidden_field in form.hidden_fields %}
                         {{ hidden_field }}
                     {% endfor %}
-        
+
                     <!-- Renderização de campos com erro -->
                     {% if form.non_field_errors %}
                         <div class="alert-danger" role="alert">
@@ -29,7 +25,7 @@
                             {% endfor %}
                         </div>
                     {% endif %}
-        
+
                     <!-- Renderização de campos sem erro -->
                     {% for field in form.visible_fields %}
                         <div class="form-row">
@@ -56,7 +52,7 @@
 
                                 {% render_field field class="input-text" %}
                             {% endif %}
-        
+
                             {% if field.help_text %}
                                 <small class="form-text text-muted">{{ field.help_text }}</small>
                             {% endif %}
@@ -66,9 +62,12 @@
                         <input type="submit" name="register" class="register" value="Votar">
                         <input type="hidden" name="next" value="{% url 'index' %}">
                     </div>
+
                 </form>
+
             {% endblock %}
         </div>
     </div>
+
 </body>
 </html>

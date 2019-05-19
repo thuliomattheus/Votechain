@@ -5,18 +5,14 @@ from cryptography.hazmat.primitives import hashes
 from base64 import b64encode
 from random import randint
 from sys import maxsize
-
-def dateToString(date):
-    return date.strftime("%d/%m/%y - %T %z")
-
-def concatenate(objList):
-    result = ""
-    for obj in objList:
-        result += str(obj)
-    return result
+from clientProject.settings import PRIVATE_KEY_FILENAME, PRIVATE_KEY_PATH
 
 def encryptSha256(message):
     return sha256(message.encode('utf-8')).hexdigest()
+
+def writeMessageOnFile(message, filename=PRIVATE_KEY_FILENAME, path=PRIVATE_KEY_PATH):
+    with open(str(path) + str(filename), 'w') as encryptedMessageFile:
+        encryptedMessageFile.write(message) 
 
 """
 def criptografar(mensagem):

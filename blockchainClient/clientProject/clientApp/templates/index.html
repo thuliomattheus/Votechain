@@ -17,8 +17,6 @@
                     <table style="border-spacing: 10px;">
                         <tr>
                             <td><a href="{% url 'index' %}">{{ user.username }}</a></td>
-                            <td><a href="{% url 'register' %}">Criar conta</a></td>
-                            <td><a href="{% url 'login' %}">Login</a></td>
                             <td><a href="{% url 'vote' %}">Votar</a></td>
                             <td><a href="{% url 'logout' %}">Logout</a></td>
                         </tr>
@@ -31,7 +29,17 @@
 
             {% block content %}
             {% endblock %}
+
+            {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                    <li class="{{ message.tags }}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
         </div>
     </div>
+
 </body>
 </html>
