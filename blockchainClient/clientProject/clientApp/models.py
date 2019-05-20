@@ -12,7 +12,13 @@ class User(AbstractUser):
         return (self.username)
 
 class Vote(AbstractVote):
-    pass
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=False, blank=False)
+
+    def getVotesByUser(self, user):
+        return Vote.objects.get(user=user)
 
 class Seeder(AbstractSeeder):
-    pass
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=False, blank=False)
+
+    def getSeedersByUser(self, user):
+        return Seeder.objects.get(user=user)

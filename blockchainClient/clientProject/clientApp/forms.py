@@ -1,5 +1,5 @@
 from django import forms
-from clientProject.clientApp.models import Vote, User
+from clientProject.clientApp.models import Vote, User, Seeder
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 
 class LoginForm(AuthenticationForm):
@@ -32,3 +32,15 @@ class VoteForm(forms.ModelForm):
     class Meta:
         model = Vote
         fields = ('candidateRole','candidateNumber', 'privateKey')
+
+class SeederForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(SeederForm, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs['placeholder'] = self.fields[field].label
+
+    class Meta:
+        model = Seeder
+        fields = '__all__'
+        exclude = ['user']

@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 import requests
 from clientProject.clientApp.models import Vote, User
-from clientProject.clientApp.forms import RegisterForm, VoteForm
+from clientProject.clientApp.forms import RegisterForm, VoteForm, SeederForm
 from clientProject.blockchainReusableApp.utilities import generateKeys, signMessage, verifySignature
 from django.contrib.auth.decorators import login_required
 from clientProject.clientApp.utilities import encryptSha256, writeMessageOnFile
@@ -30,7 +30,7 @@ def register(request):
             originalPrivateKey, user.publicKey = generateKeys()
 
             # Criação de um arquivo para guardar a chave privada real, localmente
-            writeMessageOnFile(originalPrivateKey, user.username)
+            writeMessageOnFile(originalPrivateKey, 'privateKey'+user.username.title())
 
             # Atribuição da chave privada criptografada ao usuário
                 # Com isso, a mesma pode ser guardada com segurança no banco
@@ -92,6 +92,9 @@ def vote(request):
                 vote.getCandidate()
             )
 
+            # Associação do voto, ao atual usuário
+            vote.user = request.user
+
             # Persistência dos dados no banco de dados
             vote.save()
 
@@ -113,3 +116,34 @@ def vote(request):
     else:
         form = VoteForm()
     return render(request, 'vote.html', {'form': form})
+
+@login_required
+def addSeeder(request):
+
+    # Caso a requisição seja 'POST'
+    if(request.method=='POST'):
+
+        # Inicialização do formulário
+        form = SeederForm(request.POST)
+
+        # Verificação dos dados do formulário
+        if(form.is_valid()):
+
+            # Salva os dados em uma variável auxiliar para poder manuseá-los
+            seeder = form.save(commit=False)
+
+            # Associação do node, ao atual usuário
+            seeder.user = request.user
+
+            # Salva os dados no banco
+            seeder.save()
+
+            messages.success(request, 'Novo node adicionado!')
+
+            # Redirecionamento do usuário para sua tela principal
+            return HttpResponseRedirect(reverse('login'))
+        else:
+            print(form.errors)
+    else:
+        form = SeederForm()
+    return render(request, 'addSeeder.html', {'form': form})

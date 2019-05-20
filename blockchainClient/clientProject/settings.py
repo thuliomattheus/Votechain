@@ -108,8 +108,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-PRIVATE_KEY_PATH = BASE_DIR
-PRIVATE_KEY_FILENAME = '/privateKey'
+PRIVATE_KEY_PATH = BASE_DIR + '/privateKeys/'
 
 LOGIN_URL = '/login'
 LOGIN_REDIRECT_URL = '/'

@@ -32,7 +32,7 @@ class AbstractVote(models.Model):
 class AbstractSeeder(models.Model):
     ip = models.CharField(max_length=15, blank=False, null=False)
     port = models.PositiveIntegerField(blank=False, null=False)
-    host = models.CharField(max_length=80)
+    host = models.CharField(max_length=80, blank=True, null=True)
 
     class Meta:
         abstract = True

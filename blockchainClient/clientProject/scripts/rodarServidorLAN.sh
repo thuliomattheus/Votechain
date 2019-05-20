@@ -2,7 +2,7 @@
 clear
 source /home/thulio_sousa/Documentos/TCC/tccVEnv/bin/activate
 cd ~/Documentos/TCC/blockchainClient
-python manage.py runserver 0.0.0.0:8001
+python manage.py runserver 0.0.0.0:9000
 
 # Para chamar corretamente, digite:
 #

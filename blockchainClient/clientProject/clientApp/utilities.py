@@ -5,13 +5,17 @@ from cryptography.hazmat.primitives import hashes
 from base64 import b64encode
 from random import randint
 from sys import maxsize
-from clientProject.settings import PRIVATE_KEY_FILENAME, PRIVATE_KEY_PATH
+from clientProject.settings import PRIVATE_KEY_PATH
+import os
 
 def encryptSha256(message):
     return sha256(message.encode('utf-8')).hexdigest()
 
-def writeMessageOnFile(message, filename='', path=PRIVATE_KEY_PATH):
-    with open(str(path) + PRIVATE_KEY_FILENAME + str(filename).title(), 'w') as encryptedMessageFile:
+def writeMessageOnFile(message, filename, path=PRIVATE_KEY_PATH):
+    # Cria diretório, caso não exista
+    if not os.path.exists(PRIVATE_KEY_PATH):
+        os.mkdir(PRIVATE_KEY_PATH)
+    with open(str(path) + str(filename), 'w') as encryptedMessageFile:
         encryptedMessageFile.write(message) 
 
 """

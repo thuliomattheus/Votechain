@@ -8,5 +8,6 @@ urlpatterns = [
     path('logout', LogoutView.as_view(), name='logout'),
     path('register', views.register, name='register'),
     path('vote', views.vote, name='vote'),
+    path('addSeeder', views.addSeeder, name='addSeeder'),
     path('', views.index, name='index'),
 ]
