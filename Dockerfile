@@ -2,7 +2,9 @@
 FROM python:3.7-slim
 
 # Copy the current directory contents into the container at /app
-COPY . /app
+COPY ["blockchainNode", "/app/blockchainNode"]
+COPY ["blockchainClient", "/app/blockchainClient"]
+COPY ["requirements.txt", "/app/requirements.txt"]
 
 # Set the working directory to /app
 WORKDIR /app/
