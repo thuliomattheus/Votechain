@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from nodeProject.nodeApp.models import Block, Vote
+from nodeProject.nodeApp.models import Block, Vote, Seeder
 from nodeProject.nodeApp import services
 import json
 
@@ -100,3 +100,8 @@ class BlockchainStatusSerializer(serializers.Serializer):
     Size = serializers.IntegerField(source='size')
     Difficulty = serializers.IntegerField(source='difficulty')
     Synchronization = serializers.CharField(source='status')
+
+class SeederSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Seeder
+        fields = ('__all__')

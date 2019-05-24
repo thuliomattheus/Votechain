@@ -9,7 +9,7 @@ urlpatterns = [
     path('blockchain/status/', views.Status, name='blockchainStatus'),
     path('blockchain/vote/', views.ToVote, name='vote'),
     path('blockchain/block/<int:pk>/', views.BlockDetail, name='blockDetail'),
-    path('blockchain/miningBlock/', views.MiningBlock, name='miningBlock'),
+    path('blockchain/network/', views.ConnectedNodes, name='nodeList'),
     path('', RedirectView.as_view(pattern_name='blockList'))
 ]
 

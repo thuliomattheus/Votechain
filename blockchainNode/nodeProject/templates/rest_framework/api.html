@@ -75,19 +75,21 @@
     />
 {% endblock %}
 
-{% block script %}
-    {{ block.super }}
+{% comment %}
+    {% block script %}
+        {{ block.super }}
 
-    <script>
-        $(document).ready(function() {
-            $.ajax({
-                url: '{% url "miningBlock" %}',
-                data: {},
-                complete: function (data) {
-                    //$("#calculatorAjax").show();
-                },
+        <script>
+            $(document).ready(function() {
+                $.ajax({
+                    url: '{% url "miningBlock" %}',
+                    data: {},
+                    complete: function (data) {
+                        //$("#calculatorAjax").show();
+                    },
+                });
             });
-        });
 
-    </script>
-{% endblock %}
+        </script>
+    {% endblock %}
+{% endcomment %}

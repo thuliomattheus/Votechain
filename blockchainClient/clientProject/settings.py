@@ -26,7 +26,8 @@ INSTALLED_APPS = [
     'clientProject.clientApp',
     'clientProject.blockchainReusableApp',
     'rest_framework',
-    'widget_tweaks'
+    'widget_tweaks',
+    'django_tables2',
 ]
 
 MIDDLEWARE = [

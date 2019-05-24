@@ -1,12 +1,9 @@
 from django.core.management.base import BaseCommand
-from django.conf import settings
 from django.utils import timezone
 from nodeProject.nodeApp.models import Block, Vote
 from nodeProject.nodeApp.serializers import VoteSerializer
 from nodeProject.nodeApp import services
-from nodeProject.nodeApp import utilities
 from nodeProject.blockchainReusableApp.utilities import verifySignature
-import os
 import json
 
 class Command(BaseCommand):

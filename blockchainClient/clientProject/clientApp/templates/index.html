@@ -12,32 +12,39 @@
 <body>
     <div class="page-content">
         <div class="form-v6-content">
-            {% block menu %}
-                {% if user.is_authenticated %}
-                    <table style="border-spacing: 10px;">
-                        <tr>
-                            <td><a href="{% url 'index' %}">{{ user.username }}</a></td>
-                            <td><a href="{% url 'vote' %}">Votar</a></td>
-                            <td><a href="{% url 'addSeeder' %}">Adicionar Node</a></td>
-                            <td><a href="{% url 'logout' %}">Logout</a></td>
-                        </tr>
-                    </table>
-                {% else %}
-                    <p>You are not logged in</p>
-                    <a href="{% url 'login' %}">Login</a>
+            <div>
+                {% block menu %}
+                    {% if user.is_authenticated %}
+                        <table style="border-spacing: 10px;">
+                            <tr>
+                                <td><a href="{% url 'index' %}">{{ user.username }}</a></td>
+                                <td><a href="{% url 'vote' %}">Votar</a></td>
+                                <td><a href="{% url 'addSeeder' %}">Adicionar Node</a></td>
+                                <td><a href="{% url 'seederList' %}">Lista de Nodes</a></td>
+                                <td><a href="{% url 'logout' %}">Logout</a></td>
+                            </tr>
+                        </table>
+                    {% else %}
+                        <p>You are not logged in</p>
+                        <a href="{% url 'login' %}">Login</a>
+                    {% endif %}
+                {% endblock %}
+            </div>
+
+            <div>
+                {% block content %}
+                {% endblock %}
+            </div>
+
+            <div>
+                {% if messages %}
+                    <ul class="messages">
+                        {% for message in messages %}
+                        <li class="{{ message.tags }}">{{ message }}</li>
+                        {% endfor %}
+                    </ul>
                 {% endif %}
-            {% endblock %}
-
-            {% block content %}
-            {% endblock %}
-
-            {% if messages %}
-                <ul class="messages">
-                    {% for message in messages %}
-                    <li class="{{ message.tags }}">{{ message }}</li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
+            </div>
 
         </div>
     </div>

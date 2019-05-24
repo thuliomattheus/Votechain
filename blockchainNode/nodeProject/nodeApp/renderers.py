@@ -4,6 +4,7 @@ from django.urls import resolve
 
 class BrowsableAPIExtendedRenderer(BrowsableAPIRenderer):
 
+    # As urls só serão reconhecidas, caso na view exista um @api_view(['HTTP_METHOD'])
     def get_breadcrumbs(self, request):
         breadcrumbs_list = []
 

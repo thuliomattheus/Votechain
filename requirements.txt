@@ -8,3 +8,5 @@ requests~=2.21.0
 cryptography~=2.6.1
 # Biblioteca para tornar os formulários mais personalizáveis
 django-widget-tweaks~=1.4.3
+# Biblioteca para utilizar tabelas
+django-tables2~=2.0.6

@@ -1,73 +1,62 @@
 {% extends "index.html" %}
-{% load static %}
 {% load widget_tweaks %}
 
-<html>
+{% block content %}
+    <form enctype="multipart/form-data" class="form-detail" method="POST">
+        {% csrf_token %}
+        <h3>Votar</h3>
 
-<body>
-    <div class="page-content">
-        <div class="form-v6-content">
-            {% block content %}
-                <form enctype="multipart/form-data" class="form-detail" method="POST">
-                    {% csrf_token %}
-                    <h3>Votar</h3>
+        <!-- Renderização de campos ocultos -->
+        {% for hidden_field in form.hidden_fields %}
+            {{ hidden_field }}
+        {% endfor %}
 
-                    <!-- Renderização de campos ocultos -->
-                    {% for hidden_field in form.hidden_fields %}
-                        {{ hidden_field }}
-                    {% endfor %}
+        <!-- Renderização de campos com erro -->
+        {% if form.non_field_errors %}
+            <div class="alert-danger" role="alert">
+                {% for error in form.non_field_errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+        {% endif %}
 
-                    <!-- Renderização de campos com erro -->
-                    {% if form.non_field_errors %}
-                        <div class="alert-danger" role="alert">
-                            {% for error in form.non_field_errors %}
+        <!-- Renderização de campos sem erro -->
+        {% for field in form.visible_fields %}
+            <div class="form-row">
+                {% if form.is_bound %}
+                    {% if field.errors %}
+                        {% render_field field class="input-text is-invalid" %}
+
+                        {% for error in field.errors %}
+                            <div class="invalid-feedback">
                                 {{ error }}
-                            {% endfor %}
-                        </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        {% if field.field.widget.input_type == 'select' %}
+                            {{ field.label_tag }}
+                        {% endif %}
+
+                        {% render_field field class="input-text is-valid" %}
+                    {% endif %}
+                {% else %}
+                    {% if field.field.widget.input_type == 'select' %}
+                        {{ field.label_tag }}
                     {% endif %}
 
-                    <!-- Renderização de campos sem erro -->
-                    {% for field in form.visible_fields %}
-                        <div class="form-row">
-                            {% if form.is_bound %}
-                                {% if field.errors %}
-                                    {% render_field field class="input-text is-invalid" %}
+                    {% render_field field class="input-text" %}
+                {% endif %}
 
-                                    {% for error in field.errors %}
-                                        <div class="invalid-feedback">
-                                            {{ error }}
-                                        </div>
-                                    {% endfor %}
-                                {% else %}
-                                    {% if field.field.widget.input_type == 'select' %}
-                                        {{ field.label_tag }}
-                                    {% endif %}
-
-                                    {% render_field field class="input-text is-valid" %}
-                                {% endif %}
-                            {% else %}
-                                {% if field.field.widget.input_type == 'select' %}
-                                    {{ field.label_tag }}
-                                {% endif %}
-
-                                {% render_field field class="input-text" %}
-                            {% endif %}
-
-                            {% if field.help_text %}
-                                <small class="form-text text-muted">{{ field.help_text }}</small>
-                            {% endif %}
-                        </div>
-                    {% endfor %}
-                    <div class="form-row-last">
-                        <input type="submit" name="register" class="register" value="Votar">
-                        <input type="hidden" name="next" value="{% url 'index' %}">
-                    </div>
-
-                </form>
-
-            {% endblock %}
+                {% if field.help_text %}
+                    <small class="form-text text-muted">{{ field.help_text }}</small>
+                {% endif %}
+            </div>
+        {% endfor %}
+        <div class="form-row-last">
+            <input type="submit" name="register" class="register" value="Votar">
+            <input type="hidden" name="next" value="{% url 'index' %}">
         </div>
-    </div>
 
-</body>
-</html>
+    </form>
+
+{% endblock %}

@@ -1,13 +1,15 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
-import requests
-from clientProject.clientApp.models import Vote, User
-from clientProject.clientApp.forms import RegisterForm, VoteForm, SeederForm
-from clientProject.blockchainReusableApp.utilities import generateKeys, signMessage, verifySignature
 from django.contrib.auth.decorators import login_required
-from clientProject.clientApp.utilities import encryptSha256, writeMessageOnFile
 from django.contrib import messages
+from django_tables2 import RequestConfig
+from clientProject.clientApp.models import Vote, User, Seeder
+from clientProject.clientApp.forms import RegisterForm, VoteForm, SeederForm
+from clientProject.clientApp.utilities import encryptSha256, writeMessageOnFile
+from clientProject.blockchainReusableApp.tables import SeederTable
+from clientProject.blockchainReusableApp.utilities import generateKeys, signMessage, verifySignature
+import requests
 
 # Registrar novo usuário na aplicação cliente
 def register(request):
@@ -147,3 +149,10 @@ def addSeeder(request):
     else:
         form = SeederForm()
     return render(request, 'addSeeder.html', {'form': form})
+
+def showSeederList(request):
+    if(request.method=='GET'):
+        table = SeederTable(Seeder.objects.all(), order_by="ip")
+        RequestConfig(request, paginate={"per_page": 5}).configure(table)
+
+    return render(request, "seederList.html", {"table": table})

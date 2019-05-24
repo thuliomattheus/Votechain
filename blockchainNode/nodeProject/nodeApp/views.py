@@ -3,10 +3,12 @@ from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from nodeProject.nodeApp.serializers import *
-from nodeProject.nodeApp.models import Block, Vote
+from nodeProject.nodeApp.models import Block, Vote, Seeder
 from nodeProject.nodeApp import services
 from django.http import JsonResponse
 from nodeProject.blockchainReusableApp.utilities import verifySignature
+from nodeProject.blockchainReusableApp.tables import SeederTable
+from django_tables2 import RequestConfig
 
 # Recupera os dados do bloco
 @api_view(['GET'])
@@ -32,6 +34,7 @@ def LastValidBlock(request):
     lastValidBlockIndex = services.getLastValidBlockIndex()
     return Response(LastBlockSerializer(lastValidBlockIndex).data)
 
+# Realizar o voto
 @api_view(['POST'])
 def ToVote(request):
     form = VoteSerializer(data=request.data)
@@ -43,9 +46,7 @@ def ToVote(request):
             return JsonResponse({ 'status' : 'Voto cadastrado com sucesso!'})
     return JsonResponse({ 'status' : 'Voto inválido!'})
 
-def MiningBlock(request):
-
-    while(services.getBlockchainStatus().get('status')=="Validando"):
-        continue
-
-    return JsonResponse({ 'status' : 'OK'})
+@api_view(['GET'])
+def ConnectedNodes(request):
+    seederList = Seeder.objects.all()
+    return Response(SeederSerializer(seederList, many=True, context = {'request':request}).data)
