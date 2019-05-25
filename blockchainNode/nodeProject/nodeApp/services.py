@@ -1,4 +1,4 @@
-from nodeProject.nodeApp.models import Block, Vote
+from nodeProject.nodeApp.models import Block, Vote, Seeder
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from nodeProject.nodeApp import utilities
@@ -145,5 +145,6 @@ def getBlockchainStatus():
     return {
         'size' : Block.objects.count(),
         'difficulty' : getCurrentDifficulty(),
-        'status' : getBlockchainSyncStatus()
+        'status' : getBlockchainSyncStatus(),
+        'connectedNodes' : Seeder.objects.count()
     }

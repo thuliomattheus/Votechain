@@ -32,6 +32,11 @@ class BlockSerializer(serializers.ModelSerializer):
         representation['votes'] = json.loads(instance.votes)
         return representation
 
+class FullBlockchainSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Block
+        fields = ('__all__')
+
 class BlockchainSerializer(serializers.ModelSerializer):
     class Meta:
         model = Block
@@ -97,11 +102,24 @@ class LastBlockSerializer(serializers.Serializer):
             return BlockSerializer(block).data
 
 class BlockchainStatusSerializer(serializers.Serializer):
-    Size = serializers.IntegerField(source='size')
-    Difficulty = serializers.IntegerField(source='difficulty')
-    Synchronization = serializers.CharField(source='status')
+    BlockchainSize = serializers.IntegerField(source='size', label='Blocks')
+    CurrentDifficulty = serializers.IntegerField(source='difficulty', label='Mining Difficulty')
+    Synchronization = serializers.CharField(source='status', label='Current Sync Status')
+    ConnectedNodes = serializers.IntegerField(source='connectedNodes', label='Connected Nodes')
+
+    def to_representation(self, instance):
+        # Chamada ao método herdado
+        representation = super(BlockchainStatusSerializer, self).to_representation(instance)
+        # Criação de um dicionário para retornar os dados
+        returnDict = {}
+        # Preenchimento do dicionário
+        for field in self.fields:
+            returnDict[self.fields.get(field).label] = instance.get(self.fields.get(field).source)
+
+        return returnDict
+
 
 class SeederSerializer(serializers.ModelSerializer):
     class Meta:
         model = Seeder
-        fields = ('__all__')
+        fields = ('ip', 'port')

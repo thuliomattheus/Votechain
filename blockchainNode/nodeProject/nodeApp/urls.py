@@ -8,8 +8,10 @@ urlpatterns = [
     path('blockchain/lastValidBlock/', views.LastValidBlock, name='lastValidBlock'),
     path('blockchain/status/', views.Status, name='blockchainStatus'),
     path('blockchain/vote/', views.ToVote, name='vote'),
+    path('blockchain/createConnection/', views.ToConnect, name='createConnection'),
     path('blockchain/block/<int:pk>/', views.BlockDetail, name='blockDetail'),
-    path('blockchain/network/', views.ConnectedNodes, name='nodeList'),
+    path('blockchain/syncBlocks/', views.SynchronizeBlocks, name='syncBlocks'),
+    path('blockchain/syncNodes/', views.SynchronizeNodes, name='syncNodes'),
     path('', RedirectView.as_view(pattern_name='blockList'))
 ]
 
