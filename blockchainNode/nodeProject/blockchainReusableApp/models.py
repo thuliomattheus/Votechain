@@ -23,8 +23,7 @@ class AbstractVote(models.Model):
         abstract = True
 
     def __str__(self):
-        return (self.voterPubKey + " votou no(a) candidato(a) à " +
-            self.candidateRole + " de número " + str(self.candidateNumber))
+        return ("Candidato(a) à " + self.candidateRole + " de número " + str(self.candidateNumber))
 
     def getCandidate(self):
         return (self.candidateRole + str(self.candidateNumber))
@@ -35,3 +34,6 @@ class AbstractSeeder(models.Model):
 
     class Meta:
         abstract = True
+
+    def __str__(self):
+        return("Node rodando em http://" + self.ip + ":" + str(self.port))

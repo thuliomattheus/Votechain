@@ -103,9 +103,9 @@ class LastBlockSerializer(serializers.Serializer):
 
 class BlockchainStatusSerializer(serializers.Serializer):
     BlockchainSize = serializers.IntegerField(source='size', label='Blocks')
-    CurrentDifficulty = serializers.IntegerField(source='difficulty', label='Mining Difficulty')
-    Synchronization = serializers.CharField(source='status', label='Current Sync Status')
-    ConnectedNodes = serializers.IntegerField(source='connectedNodes', label='Connected Nodes')
+    CurrentDifficulty = serializers.IntegerField(source='difficulty', label='Difficulty')
+    Synchronization = serializers.CharField(source='status', label='SyncStatus')
+    ConnectedNodes = serializers.IntegerField(source='connectedNodes', label='ConnectedNodes')
 
     def to_representation(self, instance):
         # Chamada ao método herdado

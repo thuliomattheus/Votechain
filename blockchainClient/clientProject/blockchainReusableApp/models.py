@@ -17,14 +17,13 @@ class AbstractVote(models.Model):
     voterPubKey = models.CharField(max_length=500, blank=False, null=False)
     candidateRole = models.CharField(choices=ROLES, max_length=30, blank=False, null=False)
     candidateNumber = models.PositiveIntegerField(blank=False, null=False)
-    digitalSignature = models.CharField(max_length=100, blank=False, null=False)
+    digitalSignature = models.CharField(max_length=350, blank=False, null=False)
 
     class Meta:
         abstract = True
 
     def __str__(self):
-        return (self.voterPubKey + " votou no(a) candidato(a) à " +
-            self.candidateRole + " de número " + str(self.candidateNumber))
+        return ("Candidato(a) à " + self.candidateRole + " de número " + str(self.candidateNumber))
 
     def getCandidate(self):
         return (self.candidateRole + str(self.candidateNumber))
@@ -35,3 +34,6 @@ class AbstractSeeder(models.Model):
 
     class Meta:
         abstract = True
+
+    def __str__(self):
+        return("Node rodando em http://" + self.ip + ":" + str(self.port))

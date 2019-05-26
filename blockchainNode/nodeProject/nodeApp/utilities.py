@@ -32,21 +32,3 @@ def criptografar(mensagem):
     #return salt, b64encode(digest.finalize()).decode('utf-8')
     return b64encode(digest.finalize()).decode('utf-8')
 """
-
-import requests
-
-newNode = {
-    'ip' : '127.0.0.250',
-    'port' : 8000
-}
-
-# Link do novo node
-url = 'http://'+ newNode['ip'] + ':' + str(newNode['port']) + '/blockchain/status/'
-
-try:
-    # Envio de uma requisição que envia o voto para a url definida
-    jsonResponse = requests.get(url)
-    content = jsonResponse.json()
-    print(content['Current Sync Status'])
-except requests.exceptions.ConnectionError as e:
-    print("deu ruim")

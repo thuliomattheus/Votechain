@@ -97,22 +97,39 @@ def vote(request):
             # Associação do voto, ao atual usuário
             vote.user = request.user
 
-            # Persistência dos dados no banco de dados
-            vote.save()
+            # Flag para saber se ao menos um node, recebeu o voto
+            voteFlag = False
+            # Mensagem que será exibida na tela do cliente
+            message = ''
 
-            messages.success(request, 'Seu voto foi enviado com sucesso!')
+            # Requisição do voto à todos os nodes conhecidos
+            for node in request.user.getSeeders():
 
-            # Link da api rest do node
-            url = 'http://localhost:8000/blockchain/vote/'
+                # Link das apis rest dos nodes conhecidos
+                url = 'http://'+ node.ip + ':' + str(node.port) + '/blockchain/vote/'
 
-            # Envio de uma requisição que envia o voto para a url definida
-            jsonResponse = requests.post(url, data=vote.__dict__)
+                try:
+                    # Envio de uma requisição que envia o voto para a url definida
+                    jsonResponse = requests.post(url, data=vote.__dict__)
+                    # Caso nenhum node tenha recebido votos ainda
+                    if(not voteFlag):
+                        voteFlag = True
+                        message = jsonResponse.json()['status']
+                except requests.exceptions.ConnectionError as e:
+                    if(not voteFlag):
+                        message = 'Não foi possível conectar com nenhum node!'
 
-            # Resposta da requisição
-            print(jsonResponse.json()['status'])
+            # Verifica se o voto foi enviado à ao menos um node
+            if(voteFlag):
+                messages.success(request, message)
+                vote.save()
+            else:
+                # Mensagem de falha
+                messages.error(request, message)
 
             # Redirecionamento do usuário para sua tela principal
             return HttpResponseRedirect(reverse('login'))
+
         else:
             print(form.errors)
     else:

@@ -11,14 +11,24 @@ class User(AbstractUser):
     def __str__(self):
         return (self.username)
 
+    def getVotes(self):
+        return Vote.objects.filter(user=self)
+
+    def getSeeders(self):
+        return Seeder.objects.filter(user=self)
+
 class Vote(AbstractVote):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=False, blank=False)
 
-    def getVotesByUser(self, user):
-        return Vote.objects.get(user=user)
+    @staticmethod
+    def getVotesByUserId(id):
+        user = User.objects.get(id=id)
+        return Vote.objects.filter(user=user)
 
 class Seeder(AbstractSeeder):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=False, blank=False)
 
-    def getSeedersByUser(self, user):
-        return Seeder.objects.get(user=user)
+    @staticmethod
+    def getSeedersByUserId(id):
+        user = User.objects.get(id=id)
+        return Seeder.objects.filter(user=user)
