@@ -41,6 +41,9 @@ body {
 	border-spacing: 2px;
 	border: 2px solid black;
 	border-radius: 5px;
+	width: 50% !important;
+	margin: auto;
+	margin-top: -20px;
 }
 
 .table-container a {
@@ -67,7 +70,7 @@ body {
 
 .table-container ul {
 	padding: 0px;
-    margin: 5px 5px;
+    margin: 15px 5px;
     list-style: none;
 	text-align: end;
 }

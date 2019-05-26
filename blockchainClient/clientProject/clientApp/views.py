@@ -169,7 +169,7 @@ def addSeeder(request):
 
 def showSeederList(request):
     if(request.method=='GET'):
-        table = SeederTable(Seeder.objects.all(), order_by="ip")
-        RequestConfig(request, paginate={"per_page": 5}).configure(table)
+        table = SeederTable(request.user.getSeeders(), order_by=('ip', 'port'))
+        RequestConfig(request, paginate={'per_page': 5}).configure(table)
 
-    return render(request, "seederList.html", {"table": table})
+    return render(request, 'seederList.html', {'table': table})
