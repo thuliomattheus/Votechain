@@ -1,49 +1,5 @@
-from nodeProject.nodeApp.models import Block, Vote, Seeder
-from django.db.models.signals import post_save
+from nodeProject.nodeApp.models import Block, Seeder
 from django.dispatch import receiver
-from nodeProject.nodeApp import utilities
-from django.utils import timezone
-
-# Mineração do bloco
-@receiver(post_save, sender=Block)
-def proofOfWork(sender, instance, created, **kwargs):
-
-    if(created):
-
-        # Construindo uma string de zeros do tamanho da dificuldade da blockchain
-        difficulty = instance.difficulty
-        target = "0" * difficulty
-
-        # Cópia do hash e do nonce do bloco atual
-        # para serem realizados cálculos em memória,
-        # impedindo a perda de desempenho que haveria
-        # ao ficar atualizando os dados diretamente no banco
-        currentHash = instance.currentBlockHash
-        currentNonce = 0
-
-        # Enquanto os 'n = difficulty' primeiros caracteres
-        # do hash atual não forem iguais a zero,
-        # incrementar o nonce e recalcular o hash
-        while(currentHash[:difficulty] != target):
-            # Atualização dos dados em memória
-            currentNonce = currentNonce + 1
-            currentTimestamp = timezone.now()
-            currentHash = utilities.encryptSha256(
-                    utilities.concatenate(
-                        [
-                            instance.index,
-                            utilities.dateToString(currentTimestamp),
-                            instance.votes,
-                            instance.difficulty,
-                            currentNonce,
-                            instance.previousBlockHash
-                        ]
-                    )
-                )
-        instance.nonce = currentNonce
-        instance.timestamp = currentTimestamp
-        instance.currentBlockHash = currentHash
-        instance.save()
 
 # Verificação da validação da blockchain
 def getBlockchainSyncStatus():
@@ -54,13 +10,17 @@ def getBlockchainSyncStatus():
     if(not blockchain):
         return "Válida"
 
-    # Para todos os blocos da blockchain
+    # Percorra os blocos da blockchain
     for currentBlock in blockchain:
+        # Se algum bloco não for válido
         if(not currentBlock.isValid()):
+            # Verificar se é o último e se ele está no proofOfWork
             if(currentBlock.index == len(blockchain) and
                 currentBlock.currentBlockHash=="1"*64):
                 return "Validando"
+            # Caso contrário, a blockchain inteira está inválida
             return "Inválida"
+    # Se todos os blocos forem válidos
     return "Válida"
 
 # Função para retornar a dificuldade atualizada do bloco atual

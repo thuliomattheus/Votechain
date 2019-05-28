@@ -2,6 +2,7 @@ from django.core.management.base import BaseCommand
 from django.utils import timezone
 from nodeProject.nodeApp.models import Block, Vote
 from nodeProject.nodeApp.serializers import VoteSerializer
+from nodeProject.nodeApp.tasks import proofOfWork
 from nodeProject.nodeApp import services
 from nodeProject.blockchainReusableApp.utilities import verifySignature
 import json
@@ -70,6 +71,8 @@ class Command(BaseCommand):
 
                 # Commit no banco
                 newBlock.save()
+                # Chamada da task assíncrona do "PoW"
+                proofOfWork.delay(index)
 
                 # Atribuição do bloco atual aos votos utilizados
                 for vote in votes:

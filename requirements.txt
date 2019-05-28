@@ -10,3 +10,5 @@ cryptography~=2.6.1
 django-widget-tweaks~=1.4.3
 # Biblioteca para utilizar tabelas
 django-tables2~=2.0.6
+# Biblioteca para realizar tarefas assíncronas
+celery~=4.3.0

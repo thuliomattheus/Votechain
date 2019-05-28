@@ -97,11 +97,6 @@ def vote(request):
             # Associação do voto, ao atual usuário
             vote.user = request.user
 
-            # Flag para saber se ao menos um node, recebeu o voto
-            voteFlag = False
-            # Mensagem que será exibida na tela do cliente
-            message = ''
-
             # Requisição do voto à todos os nodes conhecidos
             for node in request.user.getSeeders():
 
@@ -110,22 +105,14 @@ def vote(request):
 
                 try:
                     # Envio de uma requisição que envia o voto para a url definida
-                    jsonResponse = requests.post(url, data=vote.__dict__)
-                    # Caso nenhum node tenha recebido votos ainda
-                    if(not voteFlag):
-                        voteFlag = True
-                        message = jsonResponse.json()['status']
+                    jsonResponse = requests.post(url, data=vote.__dict__, timeout=2)
+                    messages.success(request, jsonResponse.json()['status'])
+                    vote.save()
+                    return HttpResponseRedirect(reverse('login'))
                 except requests.exceptions.ConnectionError as e:
-                    if(not voteFlag):
-                        message = 'Não foi possível conectar com nenhum node!'
+                    pass
 
-            # Verifica se o voto foi enviado à ao menos um node
-            if(voteFlag):
-                messages.success(request, message)
-                vote.save()
-            else:
-                # Mensagem de falha
-                messages.error(request, message)
+            messages.error(request, 'Não foi possível conectar com nenhum node!')
 
             # Redirecionamento do usuário para sua tela principal
             return HttpResponseRedirect(reverse('login'))

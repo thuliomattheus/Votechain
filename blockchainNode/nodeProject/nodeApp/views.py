@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from nodeProject.nodeApp.serializers import *
 from nodeProject.nodeApp.models import Block, Vote, Seeder
+from nodeProject.nodeApp.tasks import broadcastVote
 from nodeProject.nodeApp import services
 from django.http import JsonResponse
 from nodeProject.blockchainReusableApp.utilities import verifySignature
@@ -44,6 +45,7 @@ def ToVote(request):
         candidate = vote['candidateRole'] + str(vote['candidateNumber'])
         if(verifySignature(vote['digitalSignature'], candidate, vote['voterPubKey'])):
             form.save()
+            broadcastVote.delay(vote)
             return JsonResponse({ 'status' : 'Voto cadastrado com sucesso!'})
     return JsonResponse({ 'status' : 'Voto inválido!'})
 
