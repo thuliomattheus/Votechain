@@ -12,6 +12,10 @@ from nodeProject.blockchainReusableApp.utilities import verifySignature
 from nodeProject.blockchainReusableApp.tables import SeederTable
 from django_tables2 import RequestConfig
 import requests
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 # Recupera a lista de blocos
 @api_view(['GET'])
@@ -35,6 +39,8 @@ def LastValidBlock(request):
 @api_view(['GET'])
 def Status(request):
     queryset = services.getBlockchainStatus()
+    ip , porta = getIpAndPort(request)
+    logger.debug("\tIP: "+ip+" - Porta: "+porta)
     return Response(BlockchainStatusSerializer(queryset).data)
 
 # Realizar o voto
