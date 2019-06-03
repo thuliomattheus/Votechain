@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cd ~/Documentos/TCC/blockchainNode
+celery --app=nodeProject worker --loglevel=info

@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# Ir até o diretório que possui o docker-compose.yml
+cd ~/Documentos/dockerTeste
+
+# Construir container com os apps:
+sudo docker-compose build
+

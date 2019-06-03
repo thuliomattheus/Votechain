@@ -109,7 +109,11 @@ def vote(request):
                     messages.success(request, jsonResponse.json()['status'])
                     vote.save()
                     return HttpResponseRedirect(reverse('login'))
+                # Caso o node esteja indisponível na rede
                 except requests.exceptions.ConnectionError as e:
+                    pass
+                # Caso o broker do celery do servidor não esteja rodando
+                except requests.exceptions.ReadTimeout:
                     pass
 
             messages.error(request, 'Não foi possível conectar com nenhum node!')

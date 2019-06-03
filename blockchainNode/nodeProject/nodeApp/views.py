@@ -5,6 +5,7 @@ from rest_framework.decorators import api_view
 from nodeProject.nodeApp.serializers import *
 from nodeProject.nodeApp.models import Block, Vote, Seeder
 from nodeProject.nodeApp.tasks import broadcastVote
+from nodeProject.nodeApp.utilities import getIpAndPort, isAddressValid
 from nodeProject.nodeApp import services
 from django.http import JsonResponse
 from nodeProject.blockchainReusableApp.utilities import verifySignature
@@ -52,23 +53,45 @@ def ToVote(request):
 # Iniciar uma conexão com outro node
 @api_view(['POST'])
 def ToConnect(request):
+
     form = SeederSerializer(data=request.data)
 
     if(form.is_valid()):
+        # Guarda os dados do form para manipulação
         newNode = form.validated_data
 
-        # Link do novo node
-        url = 'http://'+ newNode['ip'] + ':' + str(newNode['port']) + '/blockchain/status/'
+        # Endereço do node
+        newNodeAddress = newNode['ip'] + ':' + str(newNode['port'])
 
-        try:
-            jsonResponse = requests.get(url)
-            content = jsonResponse.json()
-            if(content['Current Sync Status']=="Válida"):
-                newNode.save()
-                return JsonResponse({ 'status' : 'Node válido!'})
-        except requests.exceptions.ConnectionError as e:
-            return JsonResponse({ 'status' : 'Conexão não pôde ser realizada!'})
+        # Verifica se o endereço é válido
+        if(isAddressValid(newNodeAddress)):
 
+            # Url do status do node
+            url = 'http://' + newNodeAddress + '/blockchain/status/'
+
+            # Endereço local próprio
+            myIp, myPort = getIpAndPort(request)
+
+            # Garantindo que um node não crie solicitação para ele mesmo
+            #
+            # Para isso, ou a primeira parte do ip é diferente,
+            # Ou a porta é diferente
+            if(newNode['ip'].split('.')[0] != myIp.split('.')[0] or newNode['port'] != myPort):
+                try:
+                    # Verifica se o node solicitante é válido
+                    jsonResponse = requests.get(url)
+                    content = jsonResponse.json()
+                    if(content['SyncStatus']=="Válida"):
+                        form.save()
+                        return JsonResponse({ 'status' : 'Node válido!'})
+                # Caso algum erro de conexão aconteça
+                except requests.exceptions.ConnectionError as e:
+                    return JsonResponse({ 'status' : 'Conexão não pôde ser realizada!'})
+                except Exception as e:
+                    print(type(e))
+            # Caso algum erro de conexão aconteça
+            else:
+                return JsonResponse({ 'status' : 'Tentativa de autoconexão!'})
     return JsonResponse({ 'status' : 'Node inválido!'})
 
 # Sincronizar a lista de blocos

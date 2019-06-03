@@ -1,2 +1,0 @@
-sudo docker build -t=django .
-sudo docker run -ti -p 4000:80 django
