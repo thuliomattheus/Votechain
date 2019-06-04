@@ -4,7 +4,6 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django_tables2 import RequestConfig
-from clientProject.clientApp.models import Vote, User, Seeder
 from clientProject.clientApp.forms import RegisterForm, VoteForm, SeederForm
 from clientProject.clientApp.utilities import encryptSha256, writeMessageOnFile
 from clientProject.blockchainReusableApp.tables import SeederTable
@@ -167,6 +166,7 @@ def addSeeder(request):
         form = SeederForm()
     return render(request, 'addSeeder.html', {'form': form})
 
+@login_required
 def showSeederList(request):
     if(request.method=='GET'):
         table = SeederTable(request.user.getSeeders(), order_by=('ip', 'port'))
