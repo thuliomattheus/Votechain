@@ -67,9 +67,11 @@ def vote(request):
         # Verificação dos dados do formulário
         if(form.is_valid()):
 
-            # Criação de uma instância de voto com os dados do formulário
-               # Entretanto, nenhum dado foi salvo no dados no banco
-            vote = form.save(commit=False)
+            if(request.user.alreadyVotedOnThisRole(form.cleaned_data['candidateRole'])):
+                # Mensagem informando que a chave privada não corresponde ao usuário
+                messages.error(request, 'Você já votou neste cargo!')
+
+                return render(request, 'vote.html', {'form': VoteForm()})
 
             # Atribuição do conteúdo do arquivo, à uma variável auxiliar para manuseio
             fileContent = form.cleaned_data['privateKey'].read().decode('utf-8')
@@ -81,6 +83,10 @@ def vote(request):
                 messages.error(request, 'Chave privada incorreta!')
 
                 return render(request, 'vote.html', {'form': form})
+
+            # Criação de uma instância de voto com os dados do formulário
+               # Entretanto, nenhum dado foi salvo no dados no banco
+            vote = form.save(commit=False)
 
             # Atribuição do titulo de eleitor com os dados do usuário logado
             vote.voterDocument = request.user.voterDocument

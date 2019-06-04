@@ -11,14 +11,28 @@ class User(AbstractUser):
     def __str__(self):
         return (self.username)
 
+    def alreadyVotedOnThisRole(self, cargo):
+        return Vote.userAlreadyVotedOnThisRole(self.id, cargo)
+
+    def getVotedRoles(self):
+        return Vote.getVotedRolesByUserId(self.id)
+
     def getVotes(self):
-        return Vote.objects.filter(user=self)
+        return Vote.getVotesByUserId(self.id)
 
     def getSeeders(self):
-        return Seeder.objects.filter(user=self)
+        return Seeder.getSeedersByUserId(self.id)
 
 class Vote(AbstractVote):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=False, blank=False)
+
+    @staticmethod
+    def userAlreadyVotedOnThisRole(id, role):
+        return Vote.getVotedRolesByUserId(id).filter(candidateRole=role).exists()
+
+    @staticmethod
+    def getVotedRolesByUserId(id):
+        return Vote.getVotesByUserId(id).values('candidateRole').distinct()
 
     @staticmethod
     def getVotesByUserId(id):
