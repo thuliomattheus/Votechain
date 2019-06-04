@@ -1,0 +1,95 @@
+{% extends "rest_framework/base.html" %}
+{% load i18n %}
+{% load rest_framework %}
+{% load static %}
+
+<title>{% block title %}{% if name %}{{ name }} – {% endif %}Blockchain Votation Node{% endblock %}</title>
+
+
+<!-- Lista de páginas de estilo css -->
+{% block style %}
+    {{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/myStyle.css' %}"/>
+{% endblock %}
+
+<!-- Título da página na tela -->
+{% block branding %}
+<a class='navbar-brand' rel="nofollow" href='{% url "blockList" %}'>
+    Blockchain Votation Node
+</a>
+{% endblock %}
+
+<!-- Lista de funcionalidades do Node -->
+{% block breadcrumbs %}
+<ul class="breadcrumb">
+  {% for breadcrumb_name, breadcrumb_url in breadcrumblist %}
+    {% if breadcrumb_name == name %}
+      <li class="active"><a href="{{ breadcrumb_url }}">{{ breadcrumb_name }}</a></li>
+    {% else %}
+      <li><a href="{{ breadcrumb_url }}">{{ breadcrumb_name }}</a></li>
+    {% endif %}
+  {% endfor %}
+</ul>
+{% endblock %}
+
+<!-- Opções disponíveis na tela -->
+{% block request_forms %}
+
+    {% if 'GET' in allowed_methods %}
+        <form id="get-form" class="pull-right">
+            <fieldset>
+                {% if api_settings.URL_FORMAT_OVERRIDE %}
+                    <div class="btn-group format-selection">
+                        <a class="btn btn-primary js-tooltip" href="{{ request.get_full_path }}" rel="nofollow" title="Make a GET request on the {{ name }} resource">GET</a>
+
+                        <button class="btn btn-primary dropdown-toggle js-tooltip" data-toggle="dropdown" title="Specify a format for the GET request">
+                        <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                        {% for format in available_formats %}
+                            <li>
+                            <a class="js-tooltip format-option" href="{% add_query_param request api_settings.URL_FORMAT_OVERRIDE format %}" rel="nofollow" title="Make a GET request on the {{ name }} resource with the format set to `{{ format }}`">{{ format }}</a>
+                            </li>
+                        {% endfor %}
+                        </ul>
+                    </div>
+                {% else %}
+                    <a class="btn btn-primary js-tooltip" href="{{ request.get_full_path }}" rel="nofollow" title="Make a GET request on the {{ name }} resource">GET</a>
+                {% endif %}
+            </fieldset>
+        </form>
+    {% endif %}
+
+{% endblock %}
+
+<!-- Inclusão do gif de "minerando" -->
+{% block content %}
+    {{ block.super }}
+    <img src="{% static 'image/calculator.gif' %}" id="calculatorAjax" 
+        style = "
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            overflow: hidden; /*to remove scrollbars */
+            display: none; /*to make it visible only on fadeIn() function */"
+    />
+{% endblock %}
+
+{% comment %}
+    {% block script %}
+        {{ block.super }}
+
+        <script>
+            $(document).ready(function() {
+                $.ajax({
+                    url: '{% url "miningBlock" %}',
+                    data: {},
+                    complete: function (data) {
+                        //$("#calculatorAjax").show();
+                    },
+                });
+            });
+
+        </script>
+    {% endblock %}
+{% endcomment %}

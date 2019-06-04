@@ -1,0 +1,10 @@
+#!/bin/bash
+
+#kill all running containers with:
+  sudo docker kill $(sudo docker ps -q)
+
+#delete all stopped containers with:
+  sudo docker rm -f $(sudo docker ps -a -q)
+
+#delete all images with:
+  sudo docker rmi -f $(sudo docker images -q)

@@ -117,6 +117,7 @@ def vote(request):
                     pass
                 # Caso o broker do celery do servidor não esteja rodando
                 except requests.exceptions.ReadTimeout:
+                    print("noi")
                     pass
 
             messages.error(request, 'Não foi possível conectar com nenhum node!')

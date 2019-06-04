@@ -49,6 +49,7 @@ def ToVote(request):
     form = VoteSerializer(data=request.data)
     if(form.is_valid()):
         vote = form.validated_data
+        print(vote)
         message = vote['candidateRole'] + str(vote['candidateNumber']) + vote['voterDocument']
         if(verifySignature(vote['digitalSignature'], message, vote['voterPubKey'])):
             form.save()
