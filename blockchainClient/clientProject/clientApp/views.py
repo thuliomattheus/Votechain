@@ -66,8 +66,9 @@ def vote(request):
         # Verificação dos dados do formulário
         if(form.is_valid()):
 
+            # Verifica se o usuário já votou naquele cargo anteriormente
             if(request.user.alreadyVotedOnThisRole(form.cleaned_data['candidateRole'])):
-                # Mensagem informando que a chave privada não corresponde ao usuário
+                # Mensagem informativa ao usuário
                 messages.error(request, 'Você já votou neste cargo!')
 
                 return render(request, 'vote.html', {'form': VoteForm()})
@@ -93,13 +94,16 @@ def vote(request):
             # Atribuição da chave pública com os dados do usuário logado
             vote.voterPubKey = request.user.publicKey
 
+            # O voto do usuário
+            message = vote.getCandidate() + ":" + vote.voterDocument
+
             # Criação da assinatura digital
                 # Parâmetros:
                     # O conteúdo do arquivo que guarda a chave privada do usuário;
                     # O voto do usuário no formato: (função do candidato + número + titulo de eleitor)
             vote.digitalSignature = signMessage(
                 fileContent,
-                vote.getCandidate()+vote.voterDocument
+                message
             )
 
             # Associação do voto, ao atual usuário

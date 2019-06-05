@@ -2,6 +2,7 @@ from django.db import models
 from hashlib import sha256
 from nodeProject.nodeApp import utilities
 from nodeProject.blockchainReusableApp.models import AbstractVote, AbstractSeeder
+from django.db.models import Min
 
 class Block(models.Model):
     index = models.PositiveIntegerField(primary_key=True, blank=False, null=False)
@@ -60,6 +61,26 @@ class Vote(AbstractVote):
 
     def getBlock(self):
         return (self.block)
+
+    @staticmethod
+    def userAlreadyVotedOnThisRole(voterDocument, role):
+        return Vote.getVotesOnRoleByVoterDocument(voterDocument, role).exists()
+
+    @staticmethod
+    def getFirstVoteOnRoleByVoterDocument(voterDocument, role):
+        return Vote.getVotesOnRoleByVoterDocument(voterDocument, role).aggregate(Min('id'))['id__min']
+
+    @staticmethod
+    def getVotesOnRoleByVoterDocument(voterDocument, role):
+        return Vote.getVotesByVoterDocument(voterDocument).filter(candidateRole=role)
+
+    @staticmethod
+    def getVotedRolesByVoterDocument(voterDocument):
+        return Vote.getVotesByVoterDocument(voterDocument).values('candidateRole').distinct()
+
+    @staticmethod
+    def getVotesByVoterDocument(voterDocument):
+        return Vote.objects.filter(voterDocument=voterDocument)
 
 class Seeder(AbstractSeeder):
     pass
