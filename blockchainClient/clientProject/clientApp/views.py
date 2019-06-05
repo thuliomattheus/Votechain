@@ -4,6 +4,7 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django_tables2 import RequestConfig
+from clientProject.clientApp.models import Seeder
 from clientProject.clientApp.forms import RegisterForm, VoteForm, SeederForm
 from clientProject.clientApp.utilities import encryptSha256, writeMessageOnFile
 from clientProject.blockchainReusableApp.tables import SeederTable
@@ -39,6 +40,10 @@ def register(request):
 
             # Persistência dos dados no banco
             user.save()
+
+            # Associação do cliente com o node default
+            seeder = Seeder(ip='127.0.0.1', port='8000', user_id=user.id)
+            seeder.save()
 
             messages.success(request, 'Sua conta foi criada com sucesso!')
 
