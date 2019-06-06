@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django_tables2 import RequestConfig
-from clientProject.clientApp.models import Vote, User, Seeder
+from clientProject.clientApp.models import Seeder
 from clientProject.clientApp.forms import RegisterForm, VoteForm, SeederForm
 from clientProject.clientApp.utilities import encryptSha256, writeMessageOnFile
 from clientProject.blockchainReusableApp.tables import SeederTable
@@ -41,6 +41,11 @@ def register(request):
             # Persistência dos dados no banco
             user.save()
 
+            # Associação do cliente com o node default
+            for i in range(8000, 8011) :
+                seeder = Seeder(ip='127.0.0.1', port=str(i), user_id=user.id)
+                seeder.save()
+
             messages.success(request, 'Sua conta foi criada com sucesso!')
 
             # Redirecionamento para a tela de login
@@ -67,9 +72,12 @@ def vote(request):
         # Verificação dos dados do formulário
         if(form.is_valid()):
 
-            # Criação de uma instância de voto com os dados do formulário
-               # Entretanto, nenhum dado foi salvo no dados no banco
-            vote = form.save(commit=False)
+            # Verifica se o usuário já votou naquele cargo anteriormente
+            if(request.user.alreadyVotedOnThisRole(form.cleaned_data['candidateRole'])):
+                # Mensagem informativa ao usuário
+                messages.error(request, 'Você já votou neste cargo!')
+
+                return render(request, 'vote.html', {'form': VoteForm()})
 
             # Atribuição do conteúdo do arquivo, à uma variável auxiliar para manuseio
             fileContent = form.cleaned_data['privateKey'].read().decode('utf-8')
@@ -82,11 +90,18 @@ def vote(request):
 
                 return render(request, 'vote.html', {'form': form})
 
+            # Criação de uma instância de voto com os dados do formulário
+               # Entretanto, nenhum dado foi salvo no dados no banco
+            vote = form.save(commit=False)
+
             # Atribuição do titulo de eleitor com os dados do usuário logado
             vote.voterDocument = request.user.voterDocument
 
             # Atribuição da chave pública com os dados do usuário logado
             vote.voterPubKey = request.user.publicKey
+
+            # O voto do usuário
+            message = vote.getCandidate() + ":" + vote.voterDocument
 
             # Criação da assinatura digital
                 # Parâmetros:
@@ -94,7 +109,7 @@ def vote(request):
                     # O voto do usuário no formato: (função do candidato + número + titulo de eleitor)
             vote.digitalSignature = signMessage(
                 fileContent,
-                vote.getCandidate()+vote.voterDocument
+                message
             )
 
             # Associação do voto, ao atual usuário
@@ -117,7 +132,6 @@ def vote(request):
                     pass
                 # Caso o broker do celery do servidor não esteja rodando
                 except requests.exceptions.ReadTimeout:
-                    print("noi")
                     pass
 
             messages.error(request, 'Não foi possível conectar com nenhum node!')
@@ -162,6 +176,7 @@ def addSeeder(request):
         form = SeederForm()
     return render(request, 'addSeeder.html', {'form': form})
 
+@login_required
 def showSeederList(request):
     if(request.method=='GET'):
         table = SeederTable(request.user.getSeeders(), order_by=('ip', 'port'))

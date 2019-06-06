@@ -7,32 +7,32 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    container_name: django-node-$NODE
     command: ["python", "manage.py", "runserver" ,"0.0.0.0:80"]
     #command: ["python", "manage.py", "mineNewBlock"]
     volumes:
       - ./blockchainNode/:/app/blockchainNode
     working_dir: /app/blockchainNode
     ports:
-      - "4000:80"
+      - "$PORT:80"
     expose:
       - "80"
 
   # Rabbit MQ
   rabbit:
     image: rabbitmq:3-management
+    container_name: rabbit-node-$NODE
     environment:
       - RABBITMQ_DEFAULT_USER=guest
       - RABBITMQ_DEFAULT_PASS=guest
     working_dir: /app
-    ports:
-      - "5672:5672"
-      - "15672:15672"
 
   # Celery
   celery:
     build:
       context: .
       dockerfile: Dockerfile
+    container_name: celery-node-$NODE
     command: ["celery", "-A", "nodeProject", "worker", "--loglevel=info"]
     volumes:
       - ./blockchainNode/:/app/blockchainNode

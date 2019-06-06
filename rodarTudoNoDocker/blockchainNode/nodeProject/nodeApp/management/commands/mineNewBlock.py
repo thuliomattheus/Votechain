@@ -16,14 +16,30 @@ class Command(BaseCommand):
         # Só adiciona novos blocos, se o último já tiver sido validado
         if(services.getBlockchainSyncStatus() == "Válida"):
 
-            # Retorna todos os votos
-            allVotes = Vote.objects.all()
+            # Lista de votos extras que um usuário possui
+            extraVotes = []
 
-            # Remove os votos que não possuem assinatura válida
-            for vote in allVotes:
-                if(not verifySignature(vote.digitalSignature, vote.getCandidate(), vote.voterPubKey)):
+            for vote in Vote.objects.all():
+                message = vote.getCandidate() + ":" + vote.voterDocument
+                # Remove os votos que não possuem assinatura válida
+                if(not verifySignature(vote.digitalSignature, message , vote.voterPubKey)):
                     print("O voto " + str(vote.id) + " foi removido")
                     Vote.objects.filter(id=vote.id).delete()
+                # Busca por votos que possuem o mesmo cargo e o mesmo título
+                if(len(Vote.getVotesOnRoleByVoterDocument(vote.voterDocument, vote.candidateRole))>1):
+                    # Caso o voto ainda não esteja na lista, adicione-o
+                    if(extraVotes.count([vote.voterDocument, vote.candidateRole])==0):
+                        extraVotes.append([vote.voterDocument, vote.candidateRole])
+
+            # Remove os votos extras que algum usuário possa ter feito em um dado cargo
+            for voterDocument, candidateRole in extraVotes:
+                # Busca todos os votos extras do mesmo usuario no mesmo cargo
+                votes = Vote.getVotesOnRoleByVoterDocument(voterDocument, candidateRole)
+                # Percorre-os
+                for vote in votes :
+                    # Caso ele não seja o primeiro, apague-o
+                    if(vote.id is not Vote.getFirstVoteOnRoleByVoterDocument(voterDocument, candidateRole)):
+                        Vote.objects.filter(id=vote.id).delete()
 
             # Votos que serão atribuídos ao novo bloco
             votes = Vote.objects.filter(block_id=None)[0:5]

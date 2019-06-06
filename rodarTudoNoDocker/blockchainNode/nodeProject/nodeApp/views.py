@@ -49,8 +49,13 @@ def ToVote(request):
     form = VoteSerializer(data=request.data)
     if(form.is_valid()):
         vote = form.validated_data
-        print(vote)
-        message = vote['candidateRole'] + str(vote['candidateNumber']) + vote['voterDocument']
+
+        # Verificação se alguém com esse título, já votou nesse cargo
+        if(Vote.userAlreadyVotedOnThisRole(vote['voterDocument'], vote['candidateRole'])):
+            return JsonResponse({ 'status' : 'Voto inválido! Eleitor já votou nesse cargo!'})
+
+        message = vote['candidateRole'] + str(vote['candidateNumber']) + ":" + vote['voterDocument']
+
         if(verifySignature(vote['digitalSignature'], message, vote['voterPubKey'])):
             form.save()
             broadcastVote.delay(vote)

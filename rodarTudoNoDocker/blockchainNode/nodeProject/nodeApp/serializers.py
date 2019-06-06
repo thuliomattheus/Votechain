@@ -6,7 +6,7 @@ import json
 class VoteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Vote
-        fields = ('__all__')
+        exclude = ['block']
 
 class BlockSerializer(serializers.ModelSerializer):
     class Meta:
