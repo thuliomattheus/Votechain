@@ -1,12 +1,8 @@
-#*
-#!*.h
-#!*.cpp
-#!*.py
-#!*Makefile
-#!*/
 *__pycache__*
 *.vscode*
 *tccVEnv*
 *sqlite*
 *migrations*
 *privateKey*
+rodarTudonoDocker/nodesAuxiliares/node[3-10]/
+
