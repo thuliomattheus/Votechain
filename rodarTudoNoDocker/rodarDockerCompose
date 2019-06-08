@@ -1,7 +1,14 @@
 #!/bin/bash
 
+# Para rodar utilize o formato a seguir como exemplo:
+# . rodarDockerCompose 8001 1
+#
+# O primeiro argumento será o numero da porta
+#
+# O segundo argumento será o número concatenado ao nome do container gerada
+
 # Ir até o diretório que possui o docker-compose.yml
 cd ~/Documentos/TCC/rodarTudoNoDocker
 
 # Construir container com os apps:
-sudo PORT=$1 NODE=$2 docker-compose up --build
+sudo PORT=$1 NUMBER=$2 docker-compose -p docker_node_$2 up --build
