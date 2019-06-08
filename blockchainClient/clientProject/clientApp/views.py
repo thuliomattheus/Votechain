@@ -7,7 +7,7 @@ from django_tables2 import RequestConfig
 from clientProject.clientApp.models import Seeder
 from clientProject.clientApp.forms import RegisterForm, VoteForm, SeederForm
 from clientProject.clientApp.utilities import encryptSha256, writeMessageOnFile
-from clientProject.blockchainReusableApp.tables import SeederTable
+from clientProject.blockchainReusableApp.tables import SeederTable, VoteTable
 from clientProject.blockchainReusableApp.utilities import generateKeys, signMessage, verifySignature
 import requests
 
@@ -144,6 +144,14 @@ def vote(request):
     else:
         form = VoteForm()
     return render(request, 'vote.html', {'form': form})
+
+@login_required
+def showVoteList(request):
+    if(request.method=='GET'):
+        table = VoteTable(request.user.getVotes())
+        RequestConfig(request).configure(table)
+
+    return render(request, 'voteList.html', {'table': table})
 
 @login_required
 def addSeeder(request):
