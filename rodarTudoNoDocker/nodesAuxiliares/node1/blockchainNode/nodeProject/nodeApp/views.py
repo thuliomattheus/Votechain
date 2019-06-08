@@ -54,11 +54,21 @@ def ToVote(request):
         if(Vote.userAlreadyVotedOnThisRole(vote['voterDocument'], vote['candidateRole'])):
             return JsonResponse({ 'status' : 'Voto inválido! Eleitor já votou nesse cargo!'})
 
+        # Formatação da mensagem que representará o voto
         message = vote['candidateRole'] + str(vote['candidateNumber']) + ":" + vote['voterDocument']
 
+        # Caso a assinatura digital seja válida
         if(verifySignature(vote['digitalSignature'], message, vote['voterPubKey'])):
+
+            # Endereço local próprio
+            myIp, myPort = getIpAndPort(request)
+
+            # Salva o voto no banco
             form.save()
-            broadcastVote.delay(vote)
+
+            # Envia o voto para os nodes conhecidos
+            broadcastVote.delay(vote, myIp, myPort)
+
             return JsonResponse({ 'status' : 'Voto cadastrado com sucesso!'})
     return JsonResponse({ 'status' : 'Voto inválido!'})
 

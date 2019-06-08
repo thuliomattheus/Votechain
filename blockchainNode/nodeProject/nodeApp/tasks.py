@@ -4,10 +4,14 @@ from nodeProject.nodeApp.utilities import concatenate, encryptSha256, dateToStri
 from celery import shared_task
 import requests
 from django.utils import timezone
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 # Broadcast dos votos
 @shared_task
-def broadcastVote(vote):
+def broadcastVote(vote, ip, port):
 
     # Broadcast do voto para os nodes conhecidos
     for node in Seeder.objects.all():
@@ -15,13 +19,18 @@ def broadcastVote(vote):
         # Link das apis rest dos nodes conhecidos
         url = 'http://'+ node.ip + ':' + str(node.port) + '/blockchain/vote/'
 
-        try:
-            # Envio de uma requisição que envia o voto para a url definida
-            jsonResponse = requests.post(url, data=vote, timeout=5)
-            print("Pra essa url: " + url + " funcionou")
-        except requests.exceptions.ConnectionError as e:
-            print("Pra essa url: " + url + " deu ruim")
-            pass
+        # Garantindo que um node não envie voto para ele mesmo
+        #
+        # Para isso, ou a primeira parte do ip é diferente,
+        # Ou a porta é diferente
+        if(node.ip.split('.')[0] != myIp.split('.')[0] or node.port != myPort):
+            try:
+                # Envio de uma requisição que envia o voto para a url definida
+                jsonResponse = requests.post(url, data=vote, timeout=5)
+                logger.DEBUG("Pra essa url: " + url + " funcionou")
+            # Caso algum erro de conexão aconteça
+            except Exception:
+                logger.DEBUG("Pra essa url: " + url + " não funcionou")
 
 # Mineração do bloco
 @shared_task
