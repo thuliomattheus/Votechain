@@ -11,7 +11,6 @@ urlpatterns = [
     path('blockchain/createConnection/', views.ToConnect, name='createConnection'),
     path('blockchain/block/<int:pk>/', views.BlockDetail, name='blockDetail'),
     path('blockchain/syncBlocks/', views.SynchronizeBlocks, name='syncBlocks'),
-    path('blockchain/syncNodes/', views.SynchronizeNodes, name='syncNodes'),
     path('', RedirectView.as_view(pattern_name='blockList'))
 ]
 

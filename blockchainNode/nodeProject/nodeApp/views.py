@@ -99,7 +99,7 @@ def ToConnect(request):
             #
             # Para isso, ou a primeira parte do ip é diferente,
             # Ou a porta é diferente
-            if(newNode['ip'].split('.')[0] != myIp.split('.')[0] or newNode['port'] != myPort):
+            if(newNode['ip'].split('.')[0] != myIp.split('.')[0] or str(newNode['port']) != myPort):
                 try:
                     # Verifica se o node solicitante é válido
                     jsonResponse = requests.get(url)
@@ -122,9 +122,3 @@ def ToConnect(request):
 def SynchronizeBlocks(request):
     blockchain = Block.objects.all()
     return Response(FullBlockchainSerializer(blockchain, many=True, context = {'request':request}).data)
-
-# Sincronizar a lista de nodes
-@api_view(['GET'])
-def SynchronizeNodes(request):
-    seederList = Seeder.objects.all()
-    return Response(SeederSerializer(seederList, many=True, context = {'request':request}).data)
