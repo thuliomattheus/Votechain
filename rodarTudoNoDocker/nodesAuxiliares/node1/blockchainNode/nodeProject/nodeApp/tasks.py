@@ -2,6 +2,7 @@ from __future__ import absolute_import
 from nodeProject.nodeApp import services
 from nodeProject.nodeApp.models import Seeder, Block, Vote
 from nodeProject.nodeApp.serializers import VoteSerializer
+from nodeProject.nodeApp.services import getLongestBlockchain
 from nodeProject.nodeApp.utilities import concatenate, encryptSha256, dateToString
 from nodeProject.blockchainReusableApp.utilities import verifySignature
 from django.utils import timezone
