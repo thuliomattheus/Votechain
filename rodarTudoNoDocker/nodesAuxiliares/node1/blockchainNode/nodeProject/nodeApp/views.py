@@ -12,6 +12,11 @@ from nodeProject.blockchainReusableApp.utilities import verifySignature
 from nodeProject.blockchainReusableApp.tables import SeederTable
 from django_tables2 import RequestConfig
 import requests
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 
 # Recupera a lista de blocos
 @api_view(['GET'])
@@ -47,6 +52,7 @@ def ToVote(request):
 
         # Verificação se alguém com esse título, já votou nesse cargo
         if(Vote.userAlreadyVotedOnThisRole(vote['voterDocument'], vote['candidateRole'])):
+            logger.info('Voto inválido! Eleitor já votou nesse cargo!')
             return JsonResponse({ 'status' : 'Voto inválido! Eleitor já votou nesse cargo!'})
 
         # Formatação da mensagem que representará o voto
