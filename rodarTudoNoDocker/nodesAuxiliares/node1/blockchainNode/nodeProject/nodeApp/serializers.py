@@ -106,6 +106,8 @@ class BlockchainStatusSerializer(serializers.Serializer):
     CurrentDifficulty = serializers.IntegerField(source='difficulty', label='Difficulty')
     Synchronization = serializers.CharField(source='status', label='SyncStatus')
     ConnectedNodes = serializers.IntegerField(source='connectedNodes', label='ConnectedNodes')
+    Ip = serializers.CharField(source='ip', label='Ip')
+    Port = serializers.CharField(source='port', label='Porta')
 
     def to_representation(self, instance):
         # Chamada ao método herdado

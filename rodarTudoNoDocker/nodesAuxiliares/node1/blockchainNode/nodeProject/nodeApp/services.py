@@ -102,10 +102,12 @@ def isBlockValid(block):
     return True if block.index <= getLastValidBlockIndex() else False
 
 # Função para mostrar as principais informações da blockchain
-def getBlockchainStatus():
+def getBlockchainStatus(ip, port):
     return {
         'size' : Block.objects.count(),
         'difficulty' : getCurrentDifficulty(),
         'status' : getBlockchainSyncStatus(),
-        'connectedNodes' : Seeder.objects.count()
+        'connectedNodes' : Seeder.objects.count(),
+        'ip': ip,
+        'port': port
     }
