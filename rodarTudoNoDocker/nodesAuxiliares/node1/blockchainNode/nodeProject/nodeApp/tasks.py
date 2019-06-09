@@ -11,7 +11,7 @@ import requests
 import logging
 import json
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Broadcast dos votos
@@ -32,10 +32,10 @@ def broadcastVote(vote, myIp, myPort):
             try:
                 # Envio de uma requisição que envia o voto para a url definida
                 jsonResponse = requests.post(url, data=vote, timeout=5)
-                logger.debug("Pra essa url: " + url + " funcionou")
+                logger.info("Pra essa url: " + url + " funcionou")
             # Caso algum erro de conexão aconteça
             except:
-                logger.debug("Pra essa url: " + url + " não funcionou")
+                logger.info("Pra essa url: " + url + " não funcionou")
 
 # Mineração do bloco
 @shared_task

@@ -61,8 +61,6 @@ def ToVote(request):
             # Salva o voto no banco
             form.save()
 
-            print(myIp)
-            print(myPort)
             # Envia o voto para os nodes conhecidos
             broadcastVote.delay(vote, myIp, myPort)
 
