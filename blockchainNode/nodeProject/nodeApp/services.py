@@ -1,5 +1,10 @@
 from nodeProject.nodeApp.models import Block, Seeder
 from django.dispatch import receiver
+import requests
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # Verificação da validação da blockchain
 def getBlockchainSyncStatus():
@@ -111,3 +116,35 @@ def getBlockchainStatus(ip, port):
         'ip': ip,
         'port': port
     }
+
+# Função para descobrir qual a blockchain mais longa da rede
+def getLongestBlockchain():
+    # Quantidade de blocos do próprio node
+    myLength = Block.objects.count()
+    # Id do node que possui a maior quantidade de blocos
+    node = 0
+    # Quantidade de blocos do node com mais blocos
+    maxLength = myLength
+
+    # Para todos os nodes conhecidos, acesse seu status
+    for seeder in Seeder.objects.all():
+        url = 'http://' + seeder.ip + ":" + str(seeder.post) + '/blockchain/status/'
+
+        try:
+            # Envia uma requisição para a página de status do node conhecido
+            response = requests.get(url)
+            # Guarda a quantidade de blocos do node
+            nodeLength = response['Blocks']
+            # Guarda o status do node
+            nodeStatus = response['SyncStatus']
+            # Caso o node possua mais blocos do que todos já verificados e seja válido
+            if(nodeLength > maxLength and nodeStatus=='Válida'):
+                # Atualize o id do node com mais blocos
+                node = seeder.id
+                # Atualize o maior tamanho de blocos encontrado
+                maxLength = nodeLength
+                logger.info('Por enquanto o node que possui mais blocos é : ' + url + " com " + nodeLength)
+        except:
+            logger.warning('Node em ' + url + ' está indisponível!')
+
+    return node, maxLength

@@ -84,6 +84,83 @@ def proofOfWork(blockId):
 @shared_task(name="mine_new_block")
 def mineNewBlock():
 
+    # Verifique qual o node conhecido com mais blocos
+    biggestNodeId, biggestNodeLength = getLongestBlockchain()
+
+    # Tamanho da cadeia de blocos do próprio node
+    myLength = Block.objects.count()
+
+    # Caso nenhum node conhecido tenha mais blocos do que o próprio node
+    if(services.getBlockchainSyncStatus()=='Válida' and biggestNodeId==0):
+        logger.info("O node atual já possui a maior cadeia de blocos dentre todos os nodes conhecidos!")
+
+    # Caso contrário
+    else:
+
+        # Node conhecido com a maior cadeia de blocos
+        biggestNode = Seeder.objects.get(id=biggestNodeId)
+
+        # Caso a diferença seja apenas de um bloco, baixe apenas o último bloco válido do node
+        if((biggestNodeLength - myLength) == 1 and services.getBlockchainSyncStatus()=='Válida'):
+
+            # Guarde os dados do bloco
+            block = requests.get("http://" + biggestNode.ip + ":" + str(biggestNode.port) + "/blockchain/lastValidBlock")
+
+            # Salve todos os votos
+            for vote in block.votes:
+                newVote = Vote(
+                    voterPubKey = vote.voterPubKey,
+                    candidateRole = vote.candidateRole,
+                    voterDocument = vote.voterDocument,
+                    candidateNumber = vote.candidateNumber,
+                    digitalSignature = vote.digitalSignature,
+                )
+                newVote.save()
+
+            logger.info("Copiado o último bloco válido de " + biggestNode.ip + ":" + str(biggestNode.port))
+
+        # Caso a diferença seja de mais de um bloco, baixe a cadeia inteira
+        elif((biggestNodeLength - myLength) > 1 or services.getBlockchainSyncStatus()=='Inválida'):
+
+            # Remova todos os blocos
+            Block.objects.all().delete()
+            # Remova todos os votos
+            Vote.objects.all().delete()
+
+            # Sincronize todos os dados com o node conhecido
+            blocks = requests.get("http://" + biggestNode.ip + ":" + str(biggestNode.port) + "/blockchain/syncBlocks")
+
+            # Para cada bloco
+            for block in blocks:
+
+                # Atribua os mesmos dados ao bloco e salve-o
+                newBlock = Block(
+                    index = block.index,
+                    timestamp = block.timestamp,
+                    votes = block.votes,
+                    difficulty = block.difficulty,
+                    nonce = block.nonce,
+                    previousBlockHash = block.previousBlockHash,
+                )
+                newBlock.save()
+
+                # Para cada voto
+                for vote in blocks.votes:
+
+                    # Atribua os mesmos dados ao voto e salve-o
+                    newVote = Vote(
+                        voterPubKey = vote.voterPubKey,
+                        candidateRole = vote.candidateRole,
+                        voterDocument = vote.voterDocument,
+                        candidatenumber = vote.candidatenumber,
+                        digitalSignature = vote.digitalSignature,
+                        block_id = newBlock.id
+                    )
+                    newBlock.save()
+
+            logger.info("Copiada a cadeia de blocos inteira de " + biggestNode.ip + ":" + str(biggestNode.port))
+
+
     # Só adiciona novos blocos, se o último já tiver sido validado
     if(services.getBlockchainSyncStatus() == "Válida"):
 

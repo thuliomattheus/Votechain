@@ -5,7 +5,7 @@ from nodeProject.blockchainReusableApp.models import AbstractVote, AbstractSeede
 from django.db.models import Min
 
 class Block(models.Model):
-    index = models.PositiveIntegerField(primary_key=True, blank=False, null=False)
+    index = models.PositiveIntegerField(blank=False, null=False)
     timestamp = models.DateTimeField(blank=False, null=False)
     votes = models.TextField() # Json com a lista de votos
     difficulty = models.PositiveIntegerField(blank=False, null=False)

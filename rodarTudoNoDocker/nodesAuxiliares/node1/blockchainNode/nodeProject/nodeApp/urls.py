@@ -5,12 +5,13 @@ from django.views.generic.base import RedirectView
 
 urlpatterns = [
     path('blockchain/', views.BlockList, name='blockList'),
-    path('blockchain/lastValidBlock/', views.LastValidBlock, name='lastValidBlock'),
     path('blockchain/status/', views.Status, name='blockchainStatus'),
     path('blockchain/vote/', views.ToVote, name='vote'),
     path('blockchain/createConnection/', views.ToConnect, name='createConnection'),
     path('blockchain/block/<int:pk>/', views.BlockDetail, name='blockDetail'),
-    path('blockchain/syncBlocks/', views.SynchronizeBlocks, name='syncBlocks'),
+    path('blockchain/lastValidBlock/', views.LastValidBlock, name='lastValidBlock'),
+    path('blockchain/syncBlocks/', views.SynchronizeAllBlocks, name='syncBlocks'),
+    path('blockchain/connectedNodes', views.ConnectedNodes, name='connectedNodes'),
     path('', RedirectView.as_view(pattern_name='blockList'))
 ]
 

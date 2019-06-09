@@ -119,6 +119,11 @@ def ToConnect(request):
 
 # Sincronizar a lista de blocos
 @api_view(['GET'])
-def SynchronizeBlocks(request):
+def SynchronizeAllBlocks(request):
     blockchain = Block.objects.all()
     return Response(FullBlockchainSerializer(blockchain, many=True, context = {'request':request}).data)
+
+@api_view(['GET'])
+def ConnectedNodes(request):
+    queryset = Seeder.objects.all()
+    return Response(SeederSerializer(queryset, many=True).data)

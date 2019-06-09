@@ -37,6 +37,11 @@ class FullBlockchainSerializer(serializers.ModelSerializer):
         model = Block
         fields = ('__all__')
 
+    def to_representation(self, instance):
+        representation = super(FullBlockchainSerializer, self).to_representation(instance)
+        representation['votes'] = json.loads(instance.votes)
+        return representation
+
 class BlockchainSerializer(serializers.ModelSerializer):
     class Meta:
         model = Block
@@ -119,7 +124,6 @@ class BlockchainStatusSerializer(serializers.Serializer):
             returnDict[self.fields.get(field).label] = instance.get(self.fields.get(field).source)
 
         return returnDict
-
 
 class SeederSerializer(serializers.ModelSerializer):
     class Meta:
