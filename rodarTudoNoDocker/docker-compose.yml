@@ -15,7 +15,7 @@ services:
       context: .
       dockerfile: Dockerfile
     #command: ./nodeProject/scripts/atualizarBanco.sh
-    #command: ./nodeProject/scripts/rodarServidorLAN.sh
+    command: ./nodeProject/scripts/rodarServidorLAN.sh
     volumes:
       - ./nodesAuxiliares/node$NUMBER/blockchainNode/:/app/blockchainNode
     working_dir: /app/blockchainNode
@@ -27,7 +27,7 @@ services:
       - rabbit
 
   # Celery - Worker
-  celery:
+  celery-worker:
     build:
       context: .
       dockerfile: Dockerfile
@@ -38,8 +38,8 @@ services:
     depends_on:
       - django
 
-  # Celery - Scheduler
-  celery:
+  # Celery - Beat Scheduler
+  celery-beat:
     build:
       context: .
       dockerfile: Dockerfile
@@ -48,4 +48,4 @@ services:
       - ./nodesAuxiliares/node$NUMBER/blockchainNode/:/app/blockchainNode
     working_dir: /app/blockchainNode
     depends_on:
-      - django
+      - celery-worker

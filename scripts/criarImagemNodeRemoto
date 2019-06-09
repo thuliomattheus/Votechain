@@ -1,6 +1,0 @@
-#!/bin/bash
-
-cd ~/Documentos/TCC
-
-sudo docker build -t=django_image .
-

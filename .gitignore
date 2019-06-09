@@ -5,4 +5,4 @@
 *migrations*
 *privateKey*
 rodarTudoNoDocker/**/node[2-9]/
-*celerybeat-schedule*
+*celerybeat*

@@ -120,7 +120,7 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_BEAT_SCHEDULE = {
     'mine-new-block-every-minute': {
        'task': 'mine_new_block',
-       'schedule': crontab(minute="*/1")
+       'schedule': crontab(minute="*/10")
     }
 }
 
