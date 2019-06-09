@@ -14,8 +14,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    command: ./nodeProject/scripts/atualizarBanco.sh
-    #command: ./nodeProject/scripts/rodarServidorLAN.sh
+    #command: ./nodeProject/scripts/atualizarBanco.sh
+    command: ./nodeProject/scripts/rodarServidorLAN.sh
     volumes:
       - ./nodesAuxiliares/node$NUMBER/blockchainNode/:/app/blockchainNode
     working_dir: /app/blockchainNode

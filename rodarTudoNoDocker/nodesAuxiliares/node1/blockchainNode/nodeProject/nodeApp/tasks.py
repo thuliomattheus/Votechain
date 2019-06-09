@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 
 # Broadcast dos votos
 @shared_task
-def broadcastVote(vote, ip, port):
+def broadcastVote(vote, myIp, myPort):
 
     # Broadcast do voto para os nodes conhecidos
     for node in Seeder.objects.all():
