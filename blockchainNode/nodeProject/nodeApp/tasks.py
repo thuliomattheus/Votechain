@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 
 # Broadcast dos votos
 @shared_task
-def broadcastVote(vote, ip, port):
+def broadcastVote(vote, myIp, myPort):
 
     # Broadcast do voto para os nodes conhecidos
     for node in Seeder.objects.all():
@@ -32,10 +32,10 @@ def broadcastVote(vote, ip, port):
             try:
                 # Envio de uma requisição que envia o voto para a url definida
                 jsonResponse = requests.post(url, data=vote, timeout=5)
-                logger.DEBUG("Pra essa url: " + url + " funcionou")
+                logger.debug("Pra essa url: " + url + " funcionou")
             # Caso algum erro de conexão aconteça
-            except Exception:
-                logger.DEBUG("Pra essa url: " + url + " não funcionou")
+            except:
+                logger.debug("Pra essa url: " + url + " não funcionou")
 
 # Mineração do bloco
 @shared_task
