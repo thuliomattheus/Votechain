@@ -38,4 +38,3 @@ class AbstractSeeder(models.Model):
 
     def __str__(self):
         return("Node rodando em http://" + self.ip + ":" + str(self.port))
-

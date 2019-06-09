@@ -27,7 +27,8 @@ def getBlockchainSyncStatus():
 def getCurrentDifficulty():
 
     # Quantidade de blocos por "rodada"
-    roundSize = 3
+    # A cada n="roundSize" blocos, atualizar a dificuldade
+    roundSize = 5
 
     # Tamanho atual da blockchain
     blockchainLength = Block.objects.count()
@@ -54,11 +55,11 @@ def getCurrentDifficulty():
             minuteDifference = (lastBlock.timestamp - lastRoundFirstBlock.timestamp).seconds/60
 
             # Caso demore menos de 3 minutos por bloco
-            if(minuteDifference < (roundSize * 3)):
+            if(minuteDifference < (3 * roundSize)):
                 return lastBlockDifficulty + 1
 
             # Caso demore mais de 5 minutos por bloco
-            elif(minuteDifference > (roundSize * 5)):
+            elif(minuteDifference > (5 * roundSize)):
                 return lastBlockDifficulty - 1
 
         # Repete a dificuldade do bloco anterior

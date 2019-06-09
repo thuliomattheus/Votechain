@@ -1,4 +1,5 @@
 import os
+from celery.schedules import crontab
 
 # Diretório do app
 PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
@@ -111,10 +112,17 @@ USE_L10N = True
 USE_TZ = True
 
 #Celery Config
-BROKER_URL = 'amqp://guest:guest@localhost:5672'
+CELERY_BROKER_URL = 'amqp://guest:guest@localhost:5672'
+CELERY_TIMEZONE = 'America/Fortaleza'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
+CELERY_BEAT_SCHEDULE = {
+    'mine-new-block-every-minute': {
+       'task': 'mine_new_block',
+       'schedule': crontab(minute="*/10")
+    }
+}
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/

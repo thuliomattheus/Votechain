@@ -8,4 +8,3 @@ class SeederTable(tables.Table):
 class VoteTable(tables.Table):
     class Meta:
         model = AbstractVote
-
