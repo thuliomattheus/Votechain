@@ -28,7 +28,7 @@ def broadcastVote(vote, myIp, myPort):
         #
         # Para isso, ou a primeira parte do ip é diferente,
         # Ou a porta é diferente
-        if(node.ip.split('.')[0] != myIp.split('.')[0] or node.port != myPort):
+        if(node.ip.split('.')[0] != myIp.split('.')[0] or str(node.port) != myPort):
             try:
                 # Envio de uma requisição que envia o voto para a url definida
                 jsonResponse = requests.post(url, data=vote, timeout=5)
