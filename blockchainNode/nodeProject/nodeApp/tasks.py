@@ -36,6 +36,8 @@ def broadcastVote(vote, myIp, myPort):
             # Caso algum erro de conexão aconteça
             except:
                 logger.info("Pra essa url: " + url + " não funcionou")
+        else:
+            logger.info("Uma tentativa de autoconexão foi feita para a url: " + url)
 
 # Mineração do bloco
 @shared_task
