@@ -3,7 +3,7 @@ from nodeProject.nodeApp import services
 from nodeProject.nodeApp.models import Seeder, Block, Vote
 from nodeProject.nodeApp.serializers import VoteSerializer
 from nodeProject.nodeApp.services import getLongestBlockchain
-from nodeProject.nodeApp.utilities import concatenate, encryptSha256, dateToString
+from nodeProject.nodeApp.utilities import concatenate, encryptSha256, dateToString, stringToDate
 from nodeProject.blockchainReusableApp.utilities import verifySignature
 from django.utils import timezone
 from celery import shared_task
@@ -110,11 +110,11 @@ def mineNewBlock():
             # Salve todos os votos
             for vote in block['votes']:
                 newVote = Vote(
-                    voterPubKey = vote.voterPubKey,
-                    candidateRole = vote.candidateRole,
-                    voterDocument = vote.voterDocument,
-                    candidateNumber = vote.candidateNumber,
-                    digitalSignature = vote.digitalSignature,
+                    voterPubKey = vote['voterPubKey'],
+                    candidateRole = vote['candidateRole'],
+                    voterDocument = vote['voterDocument'],
+                    candidateNumber = vote['candidateNumber'],
+                    digitalSignature = vote['digitalSignature']
                 )
                 newVote.save()
 
@@ -132,30 +132,29 @@ def mineNewBlock():
             blocks = requests.get("http://" + biggestNode.ip + ":" + str(biggestNode.port) + "/blockchain/syncBlocks").json()
 
             # Para cada bloco
-            for block in blocks['blocks']:
+            for block in blocks:
 
                 # Atribua os mesmos dados ao bloco e salve-o
                 newBlock = Block(
-                    index = block.index,
-                    timestamp = block.timestamp,
-                    votes = block.votes,
-                    difficulty = block.difficulty,
-                    nonce = block.nonce,
-                    previousBlockHash = block.previousBlockHash,
+                    index = block['index'],
+                    timestamp = stringToDate(block['timestamp']),
+                    votes = block['votes'],
+                    difficulty = block['difficulty'],
+                    nonce = block['nonce'],
+                    previousBlockHash = block['previousBlockHash']
                 )
                 newBlock.save()
 
                 # Para cada voto
-                for vote in blocks['votes']:
+                for vote in block['votes']:
 
                     # Atribua os mesmos dados ao voto e salve-o
                     newVote = Vote(
-                        voterPubKey = vote.voterPubKey,
-                        candidateRole = vote.candidateRole,
-                        voterDocument = vote.voterDocument,
-                        candidatenumber = vote.candidatenumber,
-                        digitalSignature = vote.digitalSignature,
-                        block_id = newBlock.id
+                        voterPubKey = vote['voterPubKey'],
+                        candidateRole = vote['candidateRole'],
+                        voterDocument = vote['voterDocument'],
+                        candidateNumber = vote['candidateNumber'],
+                        digitalSignature = vote['digitalSignature']
                     )
                     newBlock.save()
 
@@ -231,7 +230,7 @@ def mineNewBlock():
                 votes = deserializedVotes,
                 difficulty = difficulty,
                 nonce = nonce,
-                previousBlockHash = previousBlockHash,
+                previousBlockHash = previousBlockHash
             )
 
             # Commit no banco

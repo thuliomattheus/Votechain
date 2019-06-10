@@ -143,7 +143,7 @@ def getLongestBlockchain():
                 node = seeder.id
                 # Atualize o maior tamanho de blocos encontrado
                 maxLength = nodeLength
-                logger.info('Por enquanto o node que possui mais blocos é : ' + url + " com " + nodeLength)
+                logger.info('Por enquanto o node que possui mais blocos é : ' + url + " com " + str(nodeLength))
         except Exception as e:
             logger.error(str(e))
             logger.warning('Node em ' + url + ' está indisponível!')
