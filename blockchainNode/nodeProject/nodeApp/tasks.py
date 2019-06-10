@@ -92,7 +92,7 @@ def mineNewBlock():
     myLength = Block.objects.count()
 
     # Caso nenhum node conhecido tenha mais blocos do que o próprio node
-    if(services.getBlockchainSyncStatus()=='Válida' and biggestNodeId==0):
+    if(biggestNodeId==0):
         logger.info("O node atual já possui a maior cadeia de blocos dentre todos os nodes conhecidos!")
 
     # Caso contrário
@@ -141,7 +141,8 @@ def mineNewBlock():
                     votes = block['votes'],
                     difficulty = block['difficulty'],
                     nonce = block['nonce'],
-                    previousBlockHash = block['previousBlockHash']
+                    previousBlockHash = block['previousBlockHash'],
+                    currentBlockHash = block['currentBlockHash']
                 )
                 newBlock.save()
 
@@ -154,9 +155,10 @@ def mineNewBlock():
                         candidateRole = vote['candidateRole'],
                         voterDocument = vote['voterDocument'],
                         candidateNumber = vote['candidateNumber'],
-                        digitalSignature = vote['digitalSignature']
+                        digitalSignature = vote['digitalSignature'],
+                        block_id = newBlock.id
                     )
-                    newBlock.save()
+                    newVote.save()
 
             logger.info("Copiada a cadeia de blocos inteira de " + biggestNode.ip + ":" + str(biggestNode.port))
 

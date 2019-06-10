@@ -11,7 +11,7 @@ def dateToString(date):
     return date.strftime("%d/%m/%y - %T %z")
 
 def stringToDate(string):
-    return datetime.strptime(string, '%d/%m/%Y- %H:%M:%S')
+    return datetime.strptime(string, '%d/%m/%Y %H:%M:%S %Z%z')
 
 def concatenate(objList):
     result = ""
