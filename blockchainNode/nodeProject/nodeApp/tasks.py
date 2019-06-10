@@ -105,10 +105,10 @@ def mineNewBlock():
         if((biggestNodeLength - myLength) == 1 and services.getBlockchainSyncStatus()=='Válida'):
 
             # Guarde os dados do bloco
-            block = requests.get("http://" + biggestNode.ip + ":" + str(biggestNode.port) + "/blockchain/lastValidBlock")
+            block = requests.get("http://" + biggestNode.ip + ":" + str(biggestNode.port) + "/blockchain/lastValidBlock").json()
 
             # Salve todos os votos
-            for vote in block.votes:
+            for vote in block['votes']:
                 newVote = Vote(
                     voterPubKey = vote.voterPubKey,
                     candidateRole = vote.candidateRole,
@@ -129,10 +129,10 @@ def mineNewBlock():
             Vote.objects.all().delete()
 
             # Sincronize todos os dados com o node conhecido
-            blocks = requests.get("http://" + biggestNode.ip + ":" + str(biggestNode.port) + "/blockchain/syncBlocks")
+            blocks = requests.get("http://" + biggestNode.ip + ":" + str(biggestNode.port) + "/blockchain/syncBlocks").json()
 
             # Para cada bloco
-            for block in blocks:
+            for block in blocks['blocks']:
 
                 # Atribua os mesmos dados ao bloco e salve-o
                 newBlock = Block(
@@ -146,7 +146,7 @@ def mineNewBlock():
                 newBlock.save()
 
                 # Para cada voto
-                for vote in blocks.votes:
+                for vote in blocks['votes']:
 
                     # Atribua os mesmos dados ao voto e salve-o
                     newVote = Vote(

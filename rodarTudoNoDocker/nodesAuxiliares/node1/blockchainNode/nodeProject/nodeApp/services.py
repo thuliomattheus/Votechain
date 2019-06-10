@@ -128,15 +128,15 @@ def getLongestBlockchain():
 
     # Para todos os nodes conhecidos, acesse seu status
     for seeder in Seeder.objects.all():
-        url = 'http://' + seeder.ip + ":" + str(seeder.post) + '/blockchain/status/'
+        url = 'http://' + seeder.ip + ":" + str(seeder.port) + '/blockchain/status/'
 
         try:
             # Envia uma requisição para a página de status do node conhecido
             response = requests.get(url)
             # Guarda a quantidade de blocos do node
-            nodeLength = response['Blocks']
+            nodeLength = response.json()['Blocks']
             # Guarda o status do node
-            nodeStatus = response['SyncStatus']
+            nodeStatus = response.json()['SyncStatus']
             # Caso o node possua mais blocos do que todos já verificados e seja válido
             if(nodeLength > maxLength and nodeStatus=='Válida'):
                 # Atualize o id do node com mais blocos
@@ -144,7 +144,8 @@ def getLongestBlockchain():
                 # Atualize o maior tamanho de blocos encontrado
                 maxLength = nodeLength
                 logger.info('Por enquanto o node que possui mais blocos é : ' + url + " com " + nodeLength)
-        except:
+        except Exception as e:
+            logger.error(str(e))
             logger.warning('Node em ' + url + ' está indisponível!')
 
     return node, maxLength
