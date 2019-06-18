@@ -1,7 +1,7 @@
 #! /bin/bash
 clear
-source /home/thulio_sousa/Documentos/TCC/tccVEnv/bin/activate
-cd ~/Documentos/TCC/blockchainNode
+source ~/Documentos/Votechain/tccVEnv/bin/activate
+cd ~/Documentos/Votechain/votechainNode
 python manage.py runserver 0.0.0.0:8000
 
 #python manage.py runserver [::]:8000 --ipv6

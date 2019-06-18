@@ -1,7 +1,7 @@
 #! /bin/bash
 clear
-source /home/thulio_sousa/Documentos/TCC/tccVEnv/bin/activate
-cd ~/Documentos/TCC/blockchainClient
+source ~/Documentos/Votechain/tccVEnv/bin/activate
+cd ~/Documentos/Votechain/votechainClient
 python manage.py runserver 0.0.0.0:9000
 
 # Para chamar corretamente, digite:

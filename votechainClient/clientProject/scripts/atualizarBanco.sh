@@ -1,5 +1,5 @@
 #! /bin/bash
-cd ~/Documentos/TCC/blockchainClient
+cd ~/Documentos/Votechain/votechainClient
 rm clientDatabase.sqlite3
 rm -r privateKeys*
 rm -r clientProject/clientApp/migrations
