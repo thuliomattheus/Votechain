@@ -85,7 +85,7 @@ def verifySignature(signature, message, senderPublicKey):
                 mgf=padding.MGF1(hashes.SHA256()),
                 salt_length=padding.PSS.MAX_LENGTH
             ),
-            hashes.SHA256() # Algoritmo utilizado para decriptar a mensagem
+            hashes.SHA256() # Algoritmo utilizado para encriptar a mensagem
         )
         return True
 
