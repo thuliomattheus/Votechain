@@ -16,9 +16,12 @@ services:
       dockerfile: Dockerfile
     #command: ./nodeProject/scripts/atualizarBanco.sh
     command: ./nodeProject/scripts/rodarServidorLAN.sh
+    # command: ./clientProject/scripts/rodarServidorLAN.sh
     volumes:
-      - ./nodesAuxiliares/node$NUMBER/blockchainNode/:/app/blockchainNode
-    working_dir: /app/blockchainNode
+      - ./nodesAuxiliares/node$NUMBER/votechainNode/:/app/votechainNode
+      #- ./votechainClient/:/app/votechainClient
+    working_dir: /app/votechainNode
+    # working_dir: /app/votechainClient
     ports:
       - "$PORT:80"
     expose:
@@ -33,8 +36,8 @@ services:
       dockerfile: Dockerfile
     command: ["celery", "-A", "nodeProject", "worker", "--loglevel=info"]
     volumes:
-      - ./nodesAuxiliares/node$NUMBER/blockchainNode/:/app/blockchainNode
-    working_dir: /app/blockchainNode
+      - ./nodesAuxiliares/node$NUMBER/votechainNode/:/app/votechainNode
+    working_dir: /app/votechainNode
     depends_on:
       - django
 
@@ -45,7 +48,7 @@ services:
       dockerfile: Dockerfile
     command: ["celery", "-A", "nodeProject", "beat", "--loglevel=info"]
     volumes:
-      - ./nodesAuxiliares/node$NUMBER/blockchainNode/:/app/blockchainNode
-    working_dir: /app/blockchainNode
+      - ./nodesAuxiliares/node$NUMBER/votechainNode/:/app/votechainNode
+    working_dir: /app/votechainNode
     depends_on:
       - celery-worker

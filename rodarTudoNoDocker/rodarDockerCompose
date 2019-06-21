@@ -8,7 +8,7 @@
 # O segundo argumento será o número concatenado ao nome do container gerada
 
 # Ir até o diretório que possui o docker-compose.yml
-cd ~/Documentos/TCC/rodarTudoNoDocker
+cd ~/Documentos/Votechain/rodarTudoNoDocker
 
 # Construir container com os apps:
 sudo PORT=$1 NUMBER=$2 docker-compose -p docker_node_$2 up --build

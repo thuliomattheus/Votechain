@@ -74,7 +74,7 @@ WSGI_APPLICATION = 'nodeProject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join('/app/blockchainNode', 'nodeDatabase.sqlite3'),
+        'NAME': os.path.join('/app/votechainNode', 'nodeDatabase.sqlite3'),
     }
 }
 

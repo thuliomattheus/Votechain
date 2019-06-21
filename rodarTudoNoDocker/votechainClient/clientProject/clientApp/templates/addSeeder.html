@@ -2,9 +2,9 @@
 {% load widget_tweaks %}
 
 {% block content %}
-    <form enctype="multipart/form-data" class="form-detail" method="POST">
+    <form class="form-detail" method="POST">
         {% csrf_token %}
-        <h3>Votar</h3>
+        <h3>Adicionar Urna</h3>
 
         <!-- Renderização de campos ocultos -->
         {% for hidden_field in form.hidden_fields %}
@@ -33,17 +33,9 @@
                             </div>
                         {% endfor %}
                     {% else %}
-                        {% if field.field.widget.input_type == 'select' or field.field.widget.input_type == 'file' or field.field.widget.input_type == 'number' %}
-                            {{ field.label_tag }} &nbsp;&nbsp;&nbsp;&nbsp;
-                        {% endif %}
-
                         {% render_field field class="input-text is-valid" %}
                     {% endif %}
                 {% else %}
-                    {% if field.field.widget.input_type == 'select' or field.field.widget.input_type == 'file' %}
-                        {{ field.label_tag }} &nbsp;&nbsp;&nbsp;&nbsp;
-                    {% endif %}
-
                     {% render_field field class="input-text" %}
                 {% endif %}
 
@@ -53,7 +45,7 @@
             </div>
         {% endfor %}
         <div class="form-row-last">
-            <input type="submit" name="register" class="register" value="Votar">
+            <input type="submit" name="register" class="register" value="Confirmar">
             <input type="hidden" name="next" value="{% url 'index' %}">
         </div>
 

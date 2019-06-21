@@ -1,4 +1,4 @@
 #! /bin/bash
 clear
-cd /app/blockchainNode
+cd /app/votechainNode
 python manage.py runserver 0.0.0.0:80
