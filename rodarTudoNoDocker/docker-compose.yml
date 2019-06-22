@@ -16,12 +16,13 @@ services:
       dockerfile: Dockerfile
     #command: ./nodeProject/scripts/atualizarBanco.sh
     command: ./nodeProject/scripts/rodarServidorLAN.sh
-    # command: ./clientProject/scripts/rodarServidorLAN.sh
+    #command: ./clientProject/scripts/atualizarBanco.sh
+    #command: ./clientProject/scripts/rodarServidorLAN.sh
     volumes:
       - ./nodesAuxiliares/node$NUMBER/votechainNode/:/app/votechainNode
       #- ./votechainClient/:/app/votechainClient
     working_dir: /app/votechainNode
-    # working_dir: /app/votechainClient
+    #working_dir: /app/votechainClient
     ports:
       - "$PORT:80"
     expose:
