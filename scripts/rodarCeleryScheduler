@@ -1,4 +1,4 @@
 #!/bin/bash
 
-cd ~/Documentos/TCC/blockchainNode
+cd ~/Documentos/Votechain/votechainNode
 celery --app=nodeProject beat --loglevel=info
