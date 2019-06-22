@@ -42,9 +42,9 @@ def register(request):
             user.save()
 
             # Associação do cliente com o node default
-            for i in range(8000, 8002) :
-                seeder = Seeder(ip='127.0.0.1', port=str(i), user_id=user.id)
-                seeder.save()
+            #for i in range(8000, 8002) :
+            #    seeder = Seeder(ip='127.0.0.1', port=str(i), user_id=user.id)
+            #    seeder.save()
 
             messages.success(request, 'Sua conta foi criada com sucesso!')
 

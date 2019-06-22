@@ -42,9 +42,9 @@ def register(request):
             user.save()
 
             # Associação do cliente com o node default
-            for i in range(8000, 8002) :
-                seeder = Seeder(ip='127.0.0.1', port=str(i), user_id=user.id)
-                seeder.save()
+            #for i in range(8000, 8002) :
+            #    seeder = Seeder(ip='127.0.0.1', port=str(i), user_id=user.id)
+            #    seeder.save()
 
             messages.success(request, 'Sua conta foi criada com sucesso!')
 
@@ -129,6 +129,7 @@ def vote(request):
                     return HttpResponseRedirect(reverse('login'))
                 # Caso o node esteja indisponível na rede
                 except requests.exceptions.ConnectionError as e:
+                    print("Erro de conexão para " + url)
                     pass
                 # Caso o broker do celery do servidor não esteja rodando
                 except requests.exceptions.ReadTimeout:
