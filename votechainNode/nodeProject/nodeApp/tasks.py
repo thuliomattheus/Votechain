@@ -138,7 +138,7 @@ def mineNewBlock():
                 newBlock = Block(
                     index = block['index'],
                     timestamp = stringToDate(block['timestamp']),
-                    votes = block['votes'],
+                    votes = json.dumps(block['votes'], indent=3, ensure_ascii=False),
                     difficulty = block['difficulty'],
                     nonce = block['nonce'],
                     previousBlockHash = block['previousBlockHash'],

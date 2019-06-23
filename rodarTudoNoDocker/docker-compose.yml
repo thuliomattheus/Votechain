@@ -2,12 +2,12 @@ version: '3.5'
 
 services:
 
-  # # Rabbit MQ
-  # rabbit:
-  #   image: rabbitmq:3-management
-  #   environment:
-  #     - RABBITMQ_DEFAULT_USER=guest
-  #     - RABBITMQ_DEFAULT_PASS=guest
+  # Rabbit MQ
+  rabbit:
+    image: rabbitmq:3-management
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
 
   # Django
   django:
@@ -15,41 +15,41 @@ services:
       context: .
       dockerfile: Dockerfile
     #command: ./nodeProject/scripts/atualizarBanco.sh
-    #command: ./nodeProject/scripts/rodarServidorLAN.sh
+    command: ./nodeProject/scripts/rodarServidorLAN.sh
     #command: ./clientProject/scripts/atualizarBanco.sh
-    command: ./clientProject/scripts/rodarServidorLAN.sh
+    #command: ./clientProject/scripts/rodarServidorLAN.sh
     volumes:
-      #- ./nodesAuxiliares/node$NUMBER/votechainNode/:/app/votechainNode
-      - ./votechainClient/:/app/votechainClient
-    #working_dir: /app/votechainNode
-    working_dir: /app/votechainClient
+      - ./nodesAuxiliares/node$NUMBER/votechainNode/:/app/votechainNode
+      #- ./votechainClient/:/app/votechainClient
+    working_dir: /app/votechainNode
+    #working_dir: /app/votechainClient
     ports:
       - "$PORT:80"
     expose:
       - "80"
-  #   depends_on:
-  #     - rabbit
+    depends_on:
+      - rabbit
 
-  # # Celery - Worker
-  # celery-worker:
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile
-  #   command: ["celery", "-A", "nodeProject", "worker", "--loglevel=info"]
-  #   volumes:
-  #     - ./nodesAuxiliares/node$NUMBER/votechainNode/:/app/votechainNode
-  #   working_dir: /app/votechainNode
-  #   depends_on:
-  #     - django
+  # Celery - Worker
+  celery-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["celery", "-A", "nodeProject", "worker", "--loglevel=info"]
+    volumes:
+      - ./nodesAuxiliares/node$NUMBER/votechainNode/:/app/votechainNode
+    working_dir: /app/votechainNode
+    depends_on:
+      - django
 
-  # # Celery - Beat Scheduler
-  # celery-beat:
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile
-  #   command: ["celery", "-A", "nodeProject", "beat", "--loglevel=info"]
-  #   volumes:
-  #     - ./nodesAuxiliares/node$NUMBER/votechainNode/:/app/votechainNode
-  #   working_dir: /app/votechainNode
-  #   depends_on:
-  #     - celery-worker
+  # Celery - Beat Scheduler
+  celery-beat:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["celery", "-A", "nodeProject", "beat", "--loglevel=info"]
+    volumes:
+      - ./nodesAuxiliares/node$NUMBER/votechainNode/:/app/votechainNode
+    working_dir: /app/votechainNode
+    depends_on:
+      - celery-worker
