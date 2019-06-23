@@ -8,10 +8,10 @@ from sys import maxsize
 import socket
 
 def dateToString(date):
-    return date.strftime('%d/%m/%y - %H:%M:%S %Z%z')
+    return date.strftime('%d/%m/%Y %H:%M:%S %Z%z')
 
 def stringToDate(string):
-    return datetime.strptime(string, '%d/%m/%y - %H:%M:%S %Z%z')
+    return datetime.strptime(string, '%d/%m/%Y %H:%M:%S %Z%z')
 
 def concatenate(objList):
     result = ""
