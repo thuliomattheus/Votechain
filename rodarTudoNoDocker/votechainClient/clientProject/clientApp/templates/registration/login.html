@@ -4,7 +4,7 @@
 <html>
 <head>
     <title>Votechain - Aplicação Cliente</title>
-    <link rel="stylesheet" href="{% static 'css/stylesheet.css' %}">
+    <link rel="stylesheet" href="{% static 'css/stylesheet-registration.css' %}">
     <link rel="stylesheet" href="{% static 'css/nunito-font.css' %}">
 </head>
 
@@ -28,7 +28,7 @@
                         {% endfor %}
                     </div>
                 {% endif %}
-    
+
                 {% for field in form.visible_fields %}
                     <div class="form-row">
                         {% if form.is_bound %}

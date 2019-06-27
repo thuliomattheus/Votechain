@@ -115,7 +115,7 @@ body {
 .form-v6-content  {
     background: #fff;
     height: 500px;
-	width: 60%;
+	width: 1200px;
 	border-radius: 8px;
 	-o-border-radius: 8px;
 	-ms-border-radius: 8px;
@@ -123,6 +123,8 @@ body {
 	-webkit-border-radius: 8px;
 	margin: 50px 0;
 	position: relative;
+	display: flex;
+	display: -webkit-flex;
 }
 
 .form-v6-content .form-left img {
@@ -133,27 +135,24 @@ body {
 }
 
 .form-v6-content .form-detail {
-	height: 90.3%;
+    padding: 2% 2% 2% 2%;
+    height: 90.3%;
 }
 
 .form-v6-content .form-detail h3 {
 	color: #333;
 	font-size: 33px;
 	text-align: center;
+    position: relative;
+    margin: 5px 0px 0px 0px;
 }
 
 .form-v6-content .form-row {
     width: 100%;
 }
 
-.form-v6-content .form-row label,
-.form-v6-content .form-row label{
-	margin-left: 10%;
-}
-
-.form-v6-content .form-row input[type='file'],
-.form-v6-content .form-row input[type='number']{
-	width: 40%;
+.form-v6-content .form-row input[type='file']{
+	width: 65%;
 }
 
 .form-v6-content .form-detail .form-row-last {
@@ -165,7 +164,7 @@ body {
 }
 
 .form-v6-content .form-detail input {
-	width: 40%;
+	width: 100%;
     border: 2px solid transparent;
     border-bottom: 2px solid #e5e5e5;
     appearance: unset;
@@ -194,10 +193,6 @@ body {
     justify-items: right;
     display: grid;
     margin: 10px 0px 10px 0px;
-}
-
-.form-v6-content .form-detail div{
-	margin-left: 10%;
 }
 
 .form-v6-content .form-detail .form-row input:focus {
@@ -232,7 +227,6 @@ body {
 
 .form-v6-content .form-detail .form-row-last input {
 	padding: 8px;
-	margin-top: 8%;
 }
 
 input::-webkit-input-placeholder { /* Chrome/Opera/Safari */
@@ -273,8 +267,12 @@ input:-moz-placeholder { /* Firefox 18- */
 		border-bottom-left-radius: 0px;
 	    border-top-right-radius: 8px;
 	}
+	.form-v6-content .form-detail {
+		padding: 30px 20px 30px 20px;
+	    width: auto;
+	}
 	.form-v6-content .form-detail .form-row input {
-		width: 45%;
+		width: 96%;
 	}
 	.form-v6-content .form-detail .register {
 		margin-bottom: 80px;

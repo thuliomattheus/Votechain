@@ -40,7 +40,7 @@
                         {% render_field field class="input-text is-valid" %}
                     {% endif %}
                 {% else %}
-                    {% if field.field.widget.input_type == 'select' or field.field.widget.input_type == 'file' %}
+                    {% if field.field.widget.input_type == 'select' or field.field.widget.input_type == 'file'  or field.field.widget.input_type == 'number'%}
                         {{ field.label_tag }} &nbsp;&nbsp;&nbsp;&nbsp;
                     {% endif %}
 

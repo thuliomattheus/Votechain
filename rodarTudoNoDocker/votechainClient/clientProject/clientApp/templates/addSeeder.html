@@ -33,9 +33,18 @@
                             </div>
                         {% endfor %}
                     {% else %}
+
+                        {% if field.field.widget.input_type == 'text' or field.field.widget.input_type == 'number' %}
+                            {{ field.label_tag }} &nbsp;&nbsp;&nbsp;&nbsp;
+                        {% endif %}
+
                         {% render_field field class="input-text is-valid" %}
                     {% endif %}
                 {% else %}
+                    {% if field.field.widget.input_type == 'text' or field.field.widget.input_type == 'number' %}
+                        {{ field.label_tag }} &nbsp;&nbsp;&nbsp;&nbsp;
+                    {% endif %}
+
                     {% render_field field class="input-text" %}
                 {% endif %}
 
