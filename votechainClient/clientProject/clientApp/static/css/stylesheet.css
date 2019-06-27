@@ -1,5 +1,19 @@
+html{
+	height: 100%;
+	width: 100%;
+	margin:  0 auto;
+	font-family: 'Nunito', sans-serif;
+	font-weight: 700;
+	background-image: -moz-linear-gradient( 136deg, rgb(0,0,70) 0%, rgb(28,181,224) 100%);
+    background-image: -webkit-linear-gradient( 136deg, rgb(0,0,70) 0%, rgb(28,181,224) 100%);
+    background-image: -ms-linear-gradient( 136deg, rgb(0,0,70) 0%, rgb(28,181,224) 100%);
+	justify-content: center;
+}
+
 body {
 	margin:  0;
+	height: 100%;
+	width: 100%;
 }
 
 .error {
@@ -90,12 +104,7 @@ body {
     background-image: -webkit-linear-gradient( 136deg, rgb(0,0,70) 0%, rgb(28,181,224) 100%);
     background-image: -ms-linear-gradient( 136deg, rgb(0,0,70) 0%, rgb(28,181,224) 100%);
 	display: flex;
-	display: -webkit-flex;
 	justify-content: center;
-	-o-justify-content: center;
-	-ms-justify-content: center;
-	-moz-justify-content: center;
-	-webkit-justify-content: center;
 	align-items: center;
 	-o-align-items: center;
 	-ms-align-items: center;
